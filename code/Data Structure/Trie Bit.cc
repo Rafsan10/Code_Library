@@ -1,61 +1,53 @@
-struct Trie {
-  struct node {
-    int next[2];
-    int cnt, fin;
-    node() :cnt(0), fin(0) {
-      for (int i = 0; i < 2; i++) next[i] = -1;
-    }
-  };
-  vector<node>data;
-  Trie() {
-    data.push_back(node());
-  }
-  void key_add(int val) {
-    int cur = 0;
-    for (int i = 30; i >= 0; i--) {
-      int id = (val >> i) & 1;
-      if (data[cur].next[id] == -1) {
-        data[cur].next[id] = data.size();
-        data.push_back(node());
-      }
-      cur = data[cur].next[id];
-      data[cur].cnt++;
-    }
-    data[cur].fin++;
-  }
-  int key_search(int val) {
-    int cur = 0;
-    for (int i = 30; ~i; i--) {
-      int id = (val >> i) & 1;
-      if (data[cur].next[id] == -1) return 0;
-      cur = data[cur].next[id];
-    }
-    return data[cur].fin;
-  }
-  void key_delete(int val) {
-    int cur = 0;
-    for (int i = 30; ~i; i--) {
-      int id = (val >> i) & 1;
-      cur = data[cur].next[id];
-      data[cur].cnt--;
-    }
-    data[cur].fin--;
-  }
-  bool key_remove(int val) {
-    if (key_search(val)) return key_delete(val), 1;
-    return 0;
-  }
-  int maxXor(int x) {
-    int cur = 0;
-    int ans = 0;
-    for (int i = 30; ~i; i--) {
-      int b = (x >> i) & 1;
-      if (data[cur].next[!b] + 1 && data[data[cur].next[!b]].cnt > 0) {
-        ans += (1LL << i);
-        cur = data[cur].next[!b];
-      }
-      else cur = data[cur].next[b];
-    }
-    return ans;
-  }
+const int BT = 32;
+class Node {
+	public:
+		Node* child[2];
+		int cnt;
+		Node() {
+			cnt = 0;
+			for (int i = 0; i < 2; i++) child[i] = NULL;
+		}
 };
+Node *root = new Node();
+
+void insert(Node* node, int x) {
+	for (int i = BT - 1; i >= 0; i--) {
+		int r = (x >> i) & 1LL;
+		if (node->child[r] == NULL) node->child[r] = new Node();
+		node = node->child[r];
+		node->cnt++;
+	}
+} // insert(root, x);
+
+int query(Node* node, int x) {
+	int mx = 0;
+	for (int i = BT - 1; i >= 0; i--) {
+		int r = (x >> i) & 1LL;
+		if (node->child[r ^ 1] == NULL || node->child[r ^ 1]->cnt == 0) {
+			if (node->child[r] == NULL) return mx;
+			node = node->child[r];
+		} else {
+			mx |= (1 << i);
+			node = node->child[r ^ 1];
+		}
+	}
+	return mx;
+} // query(root, x), get max xor
+
+void remove(Node* node, int x) {
+	for (int i = BT - 1; i >= 0; i--) {
+		int r = (x >> i) & 1LL;
+		if (node->child[r] == NULL) return;
+		node = node->child[r];
+		node->cnt--;
+	}
+} // remove(root, x)
+
+void clearTrie(Node* node) {
+    if (node == nullptr) return;
+    clearTrie(node->child[0]);
+    clearTrie(node->child[1]);
+    delete node;
+}
+// clearTrie(root), delete full trie
+// root = new Node()

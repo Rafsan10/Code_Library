@@ -1,17 +1,50 @@
-int num[MX],mem[MX],prev[MX],array[MX],res[MX],maxlen;
-void LIS(int SZ,int num[]){
-  CLR(mem),CLR(prev),CLR(array),CLR(res);
-  int i,k;
-  maxlen=1;
-  array[0]=-inf;
-  RFOR(i,1,SZ+1)	array[i]=inf;
-  prev[0]=-1,mem[0]=num[0];
-  FOR(i,SZ){
-    k=lower_bound(array,array+maxlen+1,num[i])-array;
-    if(k==1)	array[k]=num[i],mem[k]=i,prev[i]=-1;
-    else array[k]=num[i],mem[k]=i,prev[i]=mem[k-1];
-    if(k>maxlen)	maxlen=k;
-  }
-  k=0;
-  for(i=mem[maxlen];i!=-1;i=prev[i])res[k++]=num[i];
+vector<int> v = {7, 3, 5, 3, 6, 2, 9, 8};
+vector<int> seq;
+for (auto i : v) {
+  auto id = lower_bound(seq.begin(), seq.end(), i);
+  if (id == seq.end())
+    seq.push_back(i);
+  else
+    seq[id - seq.begin()] = i;
+}
+cout << seq.size() << endl;
+
+void lis(vector<int> &v) {
+	int n = v.size();
+	vector<int> dp(n + 1, 1), hash(n);
+	int mx = 1, lastInd = 0;
+	for (int i = 0; i < n; i++) {
+		hash[i] = i;
+		for (int prev = 0; prev < i; prev++) {
+			if (v[i] > v[prev] && 1 + dp[prev] > dp[i]) {
+				dp[i] = 1 + dp[prev];
+				hash[i] = prev;
+			}
+		}
+		if (mx < dp[i]) {
+			mx = dp[i];
+			lastInd = i;
+		}
+	}
+	vector<int> printSeq;
+	printSeq.push_back(v[lastInd]);
+	while (hash[lastInd] != lastInd) {
+		lastInd = hash[lastInd];
+		printSeq.push_back(v[lastInd]);
+	}
+	reverse(printSeq.begin(), printSeq.end());
+	cout << mx << "\n";
+	for (int i : printSeq) cout << i << " ";
+	cout << "\n";
+
+	// nlogn. segment tree max
+	vector<int> dp(n + 1);
+
+	for (int i = 0; i < n; i++) {
+		dp[i] = 1;
+		int mx = query(0, 1, N, 1, a[i] - 1);
+		dp[i] = max(dp[i], mx + 1);
+		update(0, 1, N, a[i], dp[i]);
+	}
+	int ans = *max_element(dp.begin(), dp.end());
 }

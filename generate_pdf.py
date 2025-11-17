@@ -17,7 +17,11 @@ def get_sections():
             print(subsection_name)
             relative_path = os.path.join(root, file_name)
             number_of_lines = len(open(relative_path).readlines())
-            hash_value = str(subprocess.check_output("Hash < \"" + relative_path + "\"", shell=True))[2:-3]
+            # Use md5sum for hash calculation
+            try:
+                hash_value = str(subprocess.check_output(["md5sum", relative_path], stderr=subprocess.DEVNULL)).split()[0][2:-1][:8]
+            except:
+                hash_value = "########"
             subsections.append((relative_path, subsection_name, number_of_lines, hash_value))
     return sections[1:]
 
@@ -32,10 +36,19 @@ def get_style(filename):
     else:
         return 'text'
 
-# TODO: check if this is everything we need
 def texify(s):
-    #s = s.replace('\'', '\\\'')
-    #s = s.replace('\"', '\\\"')
+    """Escape special LaTeX characters in strings"""
+    # Order matters - backslash must be first
+    s = s.replace('\\', '\\textbackslash{}')
+    s = s.replace('&', '\\&')
+    s = s.replace('%', '\\%')
+    s = s.replace('$', '\\$')
+    s = s.replace('#', '\\#')
+    s = s.replace('_', '\\_')
+    s = s.replace('{', '\\{')
+    s = s.replace('}', '\\}')
+    s = s.replace('~', '\\textasciitilde{}')
+    s = s.replace('^', '\\textasciicircum{}')
     return s
 
 def get_tex(sections):
@@ -53,6 +66,19 @@ if __name__ == "__main__":
     tex = get_tex(sections)
     with open('contents.tex', 'w') as f:
         f.write(tex)
-    latexmk_options = ["latexmk", "-pdf", "-shell-escape", "-cd", "notebook.tex"]
-    subprocess.call(latexmk_options)
+    
+    # Run LaTeX multiple times to generate table of contents properly
+    print("Running LaTeX compilation...")
+    
+    # First run - generates content
+    pdflatex_options = ["pdflatex", "-shell-escape", "notebook.tex"]
+    subprocess.call(pdflatex_options)
+    
+    # Second run - generates table of contents
+    subprocess.call(pdflatex_options)
+    
+    # Third run - fixes references and page numbers
+    subprocess.call(pdflatex_options)
+    
+    print("PDF generation complete!")
 

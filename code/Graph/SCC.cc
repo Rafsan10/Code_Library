@@ -1,43 +1,57 @@
-/*components: number of SCC.
-sz: size of each SCC.
-comp: component number of each node.
-Create reverse graph.
-Run find_scc() to find SCC.
-Might need to create condensation graph by create_condensed().
-Think about indeg/outdeg
-for multiple test cases- clear adj/radj/comp/vis/sz/topo/condensed.*/
-vector<int>adj[mx], radj[mx];
+vector<bool> visited; // keeps track of which vertices are already visited
 
-int comp[mx], vis[mx], sz[mx], components;
-vector<int>topo;
-void dfs(int u) {
-  vis[u] = 1;
-  for (int v : adj[u])
-    if (!vis[v]) dfs(v);
-  topo.push_back(u);
+// runs depth first search starting at vertex v.
+// each visited vertex is appended to the output vector when dfs leaves it.
+void dfs(int v, vector<vector<int>> const &adj, vector<int> &output) {
+  visited[v] = true;
+  for (auto u : adj[v])
+    if (!visited[u])
+      dfs(u, adj, output);
+  output.push_back(v);
 }
-void dfs2(int u, int val) {
-  comp[u] = val;
-  sz[val]++;
-  for (int v : radj[u])
-    if (comp[v] == -1)
-      dfs2(v, val);
-}
-void find_scc(int n) {
-  memset(vis, 0, sizeof vis);
-  memset(comp, -1, sizeof comp);
-  for (int i = 1;i <= n;i++)
-    if (!vis[i])
-      dfs(i);
-  reverse(topo.begin(), topo.end());
-  for (int u : topo)
-    if (comp[u] == -1)
-      dfs2(u, ++components);
-}
-vector<int>condensed[mx];
-void create_condensed(int n) {
-  for (int i = 1;i <= n;i++)
-    for (int v : adj[i])
-      if (comp[i] != comp[v])
-        condensed[comp[i]].push_back(comp[v]);
+
+// input: adj -- adjacency list of G
+// output: components -- the strongy connected components in G
+// output: adj_cond -- adjacency list of G^SCC (by root vertices)
+void scc(vector<vector<int>> const &adj, vector<vector<int>> &components, vector<vector<int>> &adj_cond) {
+  int n = adj.size();
+  components.clear(), adj_cond.clear();
+
+  vector<int> order; // will be a sorted list of G's vertices by exit time
+
+  visited.assign(n, false);
+
+  // first series of depth first searches
+  for (int i = 0; i < n; i++)
+    if (!visited[i])
+      dfs(i, adj, order);
+
+  // create adjacency list of G^T
+  vector<vector<int>> adj_rev(n);
+  for (int v = 0; v < n; v++)
+    for (int u : adj[v])
+      adj_rev[u].push_back(v);
+
+  visited.assign(n, false);
+  reverse(order.begin(), order.end());
+
+  vector<int> roots(n, 0); // gives the root vertex of a vertex's SCC
+
+  // second series of depth first searches
+  for (auto v : order)
+    if (!visited[v]) {
+      std::vector<int> component;
+      dfs(v, adj_rev, component);
+      components.push_back(component);
+      int root = *min_element(begin(component), end(component));
+      for (auto u : component)
+        roots[u] = root;
+    }
+
+  // add edges to condensation graph
+  adj_cond.assign(n, {});
+  for (int v = 0; v < n; v++)
+    for (auto u : adj[v])
+      if (roots[v] != roots[u])
+        adj_cond[roots[v]].push_back(roots[u]);
 }

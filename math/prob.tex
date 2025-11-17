@@ -1,46 +1,68 @@
-Continuous distributions: If
+\vspace{2.5mm}
+\textbf{Continuous distributions:} If
 $$\Pr[a<X<b] = \int_{a}^b p(x) \, dx,$$
 then $p$ is the probability density function of $X$.
-If
-$$\Pr[X<a] = P(a),$$
-then $P$ is the distribution function of $X$.
+If $\Pr[X<a] = P(a),$ then $P$ is the distribution function of $X$.
 If $P$ and $p$ both exist then
-$$
-P(a) = \int_{-\infty}^a p(x) \, dx.
-$$
-Expectation: If $X$ is discrete
-$$\E[g(X)] = \sum_x g(x) \Pr[X=x].$$
+$$P(a) = \int_{-\infty}^a p(x) \, dx.$$
+
+\vspace{2.5mm}
+\textbf{Expectation:} If $X$ is discrete
+$$E[g(X)] = \sum_x g(x) \Pr[X=x].$$
 If $X$ continuous then
-$$\E[g(X)] = \int_{-\infty}^{\infty} \!\!\!   g(x) p(x) \, dx = \int_{-\infty}^{\infty} \!\!\!   g(x) \, d P(x).$$
-Variance, standard deviation:
-$$
-\eqalign{
-\Var[X] &= \E[X^2] - \E[X]^2, \cr
-\sigma &= \sqrt{\Var[X]}. \cr
-}
-$$
-For events $A$ and $B$:
-$$\eqalign{
-\Pr[A \Or B] &= \Pr[A] + \Pr[B]  - \Pr[A \And B] \cr
-\Pr[A \And B] &= \Pr[A] \cdot \Pr[B], \cr &\hbox{iff $A$ and $B$ are independent.} \cr
-\Pr[A \vert B] &= {\Pr[A \And B]  \over \Pr[B]}}$$
-For random variables $X$ and $Y$:
-$$\eqalign{
-\E[X \cdot Y] &= \E[X] \cdot \E[Y], \cr & \hbox{if $X$ and $Y$ are independent.}\cr
-\E[X + Y] &= \E[X] + \E[Y], \cr
-\E[c X] &= c \E[X]. \cr}$$
-Bayes' theorem:
-$$\Pr[A_i\Bar B] = {\Pr[B\Bar A_i] \Pr[A_i] \over \sum_{j=1}^n \Pr[A_j] \Pr[B\Bar A_j]}.$$
-Inclusion-exclusion:
-$$\eqalign{\Pr\Big[\bigvee^n_{i=1} &X_i \Big] = \sum^n_{i=1} \Pr[X_i] + \hbox{}\cr
-&\sum_{k=2}^n (-1)^{k+1} \sum_{i_i<\cdots <i_k} \Pr\Big[\bigwedge^k_{j=1} X_{i_j}\Big].}$$
-Moment inequalities:
-$$\Pr\big[\Bar X\Bar \geq \lambda \E[X]\big] \leq {1 \over \lambda},$$
-$$\Pr\Big[\big\Bar X - \E[X]\big\Bar \geq \lambda \cdot \sigma \Big] \leq {1 \over \lambda^2}.$$
-Geometric distribution:
-$$
-\eqalign{
-\Pr[X = k] &= pq^{k-1}, \qquad q = 1-p, \cr
-\E[X] &= \sum^\infty_{k=1} kpq^{k-1} = {1 \over p}. \cr
-}
-$$
+$$E[g(X)] = \int_{-\infty}^{\infty} g(x) p(x) \, dx$$
+
+\vspace{2.5mm}
+\textbf{Variance, std deviation:}
+\begin{align*}
+\text{Var}[X] &= E[X^2] - E[X]^2,\quad
+\sigma = \sqrt{\text{Var}[X]}
+\end{align*}
+
+\vspace{2.5mm}
+\textbf{For events $A$ and $B$:}
+\begin{align*}
+\Pr[A \cup B] &= \Pr[A] + \Pr[B] - \Pr[A \cap B] \\
+\Pr[A \cap B] &= \Pr[A] \cdot \Pr[B] \text{ (indep.)} \\
+\Pr[A \mid B] &= \frac{\Pr[A \cap B]}{\Pr[B]}
+\end{align*}
+
+\vspace{2.5mm}
+\textbf{For r.v. $X$ and $Y$:}
+\begin{align*}
+E[XY] &= E[X]E[Y] \text{ (if indep.)} \\
+E[X + Y] &= E[X] + E[Y] \\
+E[cX] &= cE[X]
+\end{align*}
+
+\vspace{2.5mm}
+\textbf{Bayes' theorem:}
+$$\Pr[A_i \mid B] = \frac{\Pr[B \mid A_i] \Pr[A_i]}{\sum_{j=1}^n \Pr[A_j] \Pr[B \mid A_j]}$$
+
+\vspace{2.5mm}
+\textbf{Inclusion-exclusion:}
+$$\Pr\left[\bigcup_{i=1}^n X_i\right] = \sum_{i=1}^n \Pr[X_i] + \sum_{k=2}^n (-1)^{k+1} \sum_{i_1<\cdots<i_k} \Pr\left[\bigcap_{j=1}^k X_{i_j}\right]$$
+
+\vspace{2.5mm}
+\textbf{Moment inequalities:}
+$$\Pr[|X| \geq \lambda E[X]] \leq \frac{1}{\lambda},\quad
+\Pr[|X - E[X]| \geq \lambda\sigma] \leq \frac{1}{\lambda^2}$$
+
+\vspace{2.5mm}
+\textbf{Geometric distribution:}
+$$\Pr[X = k] = pq^{k-1}, \quad q = 1-p,\quad
+E[X] = \frac{1}{p}$$
+
+
+\vspace{2.5mm}
+\textbf{Binomial distribution:} 
+$$\Pr[X = k] = \binom{n}{k} p^k q^{n-k}, \quad q = 1-p, \quad E[X] = np$$
+
+\vspace{2.5mm}
+\textbf{Poisson distribution:} $$\Pr[X = k] = \frac{e^{-\lambda} \lambda^k}{k!}, \quad E[X] = \lambda$$
+
+\vspace{2.5mm}
+\textbf{Normal (Gaussian):} $$p(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-(x-\mu)^2/2\sigma^2}, \quad E[X] = \mu$$
+
+\vspace{2.5mm}
+\textbf{Coupon collector:} Given random coupon daily, $n$ types, uniform dist. Expected days to collect all: $nH_n$

@@ -169,3 +169,157 @@ According to Pick’s Theorem We can calculate the area of any polygon by just c
     \item $\sum\limits_{k=0}^n\binom{r+k}{k} =\binom{r+n+1}{n}$
    
 \end{itemize}
+
+
+\subsubsection{Area Formula}
+\vspace{2.5mm}
+\begin{itemize}
+    \item Rectangle: $A = l \times w$
+    \item Square: $A = s^2$
+    \item Triangle: $A = \frac{1}{2}bh$
+    \item Circle: $A = \pi r^2$
+    \item Parallelogram: $A = bh$
+    \item Pyramid Base: $A = \frac{1}{2}b \times h_{slant}$
+    \item Polygon: $A = \frac{1}{2}|\sum_{i=1}^{n-1}(x_iy_{i+1})|$
+    \item Pick's formula: $A = I + \frac{B}{2} - 1$ \\
+    where $I=$ interior points, $B=$ boundary points
+\end{itemize}
+\subsubsection{Perimeter Formulas}
+\vspace{2.5mm}
+\begin{itemize}
+    \item Rectangle: $P = 2(l + w)$
+    \item Square: $P = 4s$
+    \item Triangle: $P = a + b + c$
+    \item Circle: $P = 2\pi r$
+\end{itemize}
+
+\subsubsection{Volume Formula}
+\vspace{2.5mm}
+\begin{itemize}
+    \item Cube: $V = s^3$
+    \item Rect. Prism: $V = lwh$
+    \item Cylinder: $V = \pi r^2h$
+    \item Sphere: $V = \frac{4}{3}\pi r^3$
+    \item Pyramid: $V = \frac{1}{3}A_{base}h$
+\end{itemize}
+
+\subsubsection{Surface Area Formula}
+\vspace{2.5mm}
+\begin{itemize}
+    \item Cube: $SA = 6s^2$
+    \item Rect. Prism: $SA = 2(lw+lh+wh)$
+    \item Cylinder: $SA = 2\pi r(r+h)$
+    \item Sphere: $SA = 4\pi r^2$
+    \item Pyramid: $SA = A_{base} + \frac{1}{2}P_{base}h_{slant}$
+\end{itemize}
+
+\subsubsection{Triangles}
+\vspace{2.5mm}
+\begin{itemize}
+    \item Side Lengths: $a, b, c$
+    \item Semi Perimeter: $p = \frac{a+b+c}{2}$
+    \item Area (Heron's): $A = \sqrt{p(p-a)(p-b)(p-c)}$
+    \item Circumradius: $R = \frac{abc}{4A}$
+    \item Inradius: $r = \frac{A}{p}$
+\end{itemize}
+\subsubsection{Summation Of Series}
+\vspace{2.5mm}
+\begin{itemize}
+    \item $c^k + c^{k+1} + \cdots + c^n = \frac{c^{n+1} - c^k}{c-1}$
+    \item $1+2+3+\cdots+n=\frac{n(n+1)}{2}$
+    \item $1^2+2^2+3^2+\cdots+n^2=\frac{n(n+1)(2n+1)}{6}$
+    \item $1^3+2^3+3^3+\cdots+n^3=\left(\frac{n(n+1)}{2}\right)^2$
+    \item $1^4+2^4+3^4+\cdots+n^4=\frac{n(n+1)(2n+1)(3n^2+3n-1)}{30}$
+    \item \textbf{Arithmetic}: $S_n = \frac{n}{2} \left[2a + (n-1)d\right]$
+    \item \textbf{Geometric}: $S_n = a \cdot \frac{r^n - 1}{r - 1}$
+\end{itemize}
+
+\subsubsection{Triangle Laws}
+\vspace{2.5mm}
+\begin{itemize}
+    \item \textbf{Law of Sines}: $\dfrac{a}{\sin A} = \dfrac{b}{\sin B} = \dfrac{c}{\sin C} = 2R$
+    \item \textbf{Law of Cosines}: $a^2 = b^2 + c^2 - 2bc \cos A$
+    \item \textbf{Law of Tangents}: $\dfrac{a + b}{a - b} = \dfrac{\tan\left(\frac{A + B}{2}\right)}{\tan\left(\frac{A - B}{2}\right)}$
+\end{itemize}
+
+\subsubsection{Angle Sum and Difference}
+\vspace{2.5mm}
+\begin{align*}
+    \sin(A + B) &= \sin A \cos B + \cos A \sin B \\
+    \cos(A + B) &= \cos A \cos B - \sin A \sin B \\
+    \sin(A - B) &= \sin A \cos B - \cos A \sin B \\
+    \cos(A - B) &= \cos A \cos B + \sin A \sin B \\
+    \tan(A + B) &= \dfrac{\tan A + \tan B}{1 - \tan A \tan B} \\
+    \tan(A - B) &= \dfrac{\tan A - \tan B}{1 + \tan A \tan B}
+\end{align*}
+
+\subsubsection{Double Angle Formulas}
+\vspace{2.5mm}
+\begin{align*}
+    \sin 2\theta &= 2 \sin \theta \cos \theta \\
+    \cos 2\theta &= \cos^2 \theta - \sin^2 \theta \\
+    \tan 2\theta &= \dfrac{2 \tan \theta}{1 - \tan^2 \theta}
+\end{align*}
+
+\subsubsection{Half Angle Formulas}
+\vspace{2.5mm}
+\begin{align*}
+    \sin\left(\dfrac{\theta}{2}\right) &= \pm \sqrt{\dfrac{1 - \cos \theta}{2}} \\
+    \cos\left(\dfrac{\theta}{2}\right) &= \pm \sqrt{\dfrac{1 + \cos \theta}{2}} \\
+    \tan\left(\dfrac{\theta}{2}\right) &= \dfrac{1 - \cos \theta}{\sin \theta}
+\end{align*}
+
+\subsubsection{Sum-to-Product Formulas}
+\vspace{2.5mm}
+\begin{align*}
+    \sin r + \sin w &= 2 \sin\left(\dfrac{r + w}{2}\right) \cos\left(\dfrac{r - w}{2}\right) \\
+    \cos r + \cos w &= 2 \cos\left(\dfrac{r + w}{2}\right) \cos\left(\dfrac{r - w}{2}\right) \\
+    (V + W) \tan\left(\dfrac{r - w}{2}\right) &= (V - W) \tan\left(\dfrac{r + w}{2}\right)
+\end{align*}
+
+\subsubsection{Linear Combinations}
+\vspace{2.5mm}
+\begin{align*}
+    a \cos x + b \sin x &= r \cos(x - \phi) \\
+    a \sin x - b \cos x &= r \sin(x - \phi) \\
+    \text{where } r &= \sqrt{a^2 + b^2}, \quad \phi = \arctan(b/a)
+\end{align*}
+
+\subsubsection{Miscellaneous}
+\vspace{2.5mm}
+\begin{itemize}
+	\item $2^{100} = 2^{50} \times 2^{50}$
+	\item Fibonacci Matrix: 
+    $\begin{bmatrix} F_n\\ F_{n-1} \end{bmatrix} = 
+    \begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}^{n-1}
+    \begin{bmatrix} F_1\\ F_0 \end{bmatrix}$
+    \item $\log(n!) = \log 1 + \log 2 + \cdots + \log n$
+    \item $\gcd(a, b) = \gcd(a-b, b)$
+    \item Prime $p$ in $n!$: 
+    $\lfloor \frac{n}{p} \rfloor + \lfloor \frac{n}{p^2} \rfloor + \lfloor \frac{n}{p^3} \rfloor + \cdots$
+    \item Catalan: 
+    $\binom{2n}{n} - \binom{2n}{n-1}$
+    \item Divisors of $p^xq^y$: $(x+1)(y+1)$
+    \item Sum of divisors of $p^xq^y$: \\
+    $(1 + p + p^2 + \cdots + p^x)(1 + q + q^2 + \cdots + q^y)$
+    \item Divisibility rules:
+    \begin{itemize}
+        \item[\textbf{3}:] Sum of digits divisible by 3
+        \item[\textbf{4}:] Last two digits divisible by 4
+        \item[\textbf{5}:] Last digit 0 or 5
+        \item[\textbf{6}:] Divisible by both 2 and 3
+        \item[\textbf{7}:] Double last digit, subtract from rest
+        \item[\textbf{8}:] Last three digits divisible by 8
+        \item[\textbf{9}:] Sum of digits divisible by 9
+        \item[\textbf{11}:] $(sum\ of\ odd\ digits) - (sum\ of\ even\ digits) \equiv 0 \pmod{11}$
+    \end{itemize}
+   \item Derangement: $D_n = (n-1)D_{n-2} + (n-1)D_{n-1}$
+   \item Golden Ratio: $\Phi = \frac{1 + \sqrt{5}}{2} \approx 1.618034$
+   \item $n$-th Fibonacci: $F_n = \frac{\Phi^n - (1-\Phi)^n}{\sqrt{5}}$
+   \item Stars \& Bars: Solutions of $x_1+x_2+\cdots+x_k=n$ \\
+   $x_i > 0$: $\binom{n-1}{k-1}$, 
+   $x_i \geq 0$: $\binom{n+k-1}{k-1}$
+\end{itemize}
+
+\subsection{Probability and Expectation}
+\input{math/prob.tex}

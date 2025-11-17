@@ -1,7 +1,7 @@
-KUET_Effervescent ICPC Team notebook
+MIST_EagleForces ICPC Team notebook
 ===================================
 
-The team notebook is compiled from codes written by KUET_Effervescent team members (Mehrab Hossain Opi, Arnob Sarker, Sharif Minhazul Islam).
+The team notebook is compiled from codes written by MIST_EagleForces team members (Syed Mafijul Islam, Saif Ahmed,and Rafsan Hasnan Ratul).
 
 Generating team notebook
 ========================
@@ -13,4 +13,4 @@ Requires: [Python 2/3](https://www.python.org/), [latexmk](https://www.ctan.org/
 
 Script for generating the PDF file is `generate_pdf.py`.
 The LaTeX template that the script uses is `notebook.tex`. It recognizes common file extensions for C/C++/Java/Python and applies syntax highlighting. In order to change the color scheme or add additional languages, both `notebook.tex` and `generate_pdf.py` should be modified accordingly.
-# Effervescent_Code_Library
+# MIST_EagleForces_Code_Library

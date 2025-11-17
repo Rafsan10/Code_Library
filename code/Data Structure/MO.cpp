@@ -1,28 +1,58 @@
-const int N = 2e5 + 5;
-const int Q = 2e5 + 5;
-const int SZ = sqrt(N) + 1;
-struct qry {
-  int l, r, id, blk;
-  bool operator<(const qry& p) const {
-    return blk == p.blk ? r < p.r : blk < p.blk;
-  }
-};
-qry query[Q];
-ll ans[Q];
-void add(int id) {}
-void remove(int id) {}
-ll get() {}
-int n, q;
-void MO() {
-  sort(query, query + q);
-  int cur_l = 0, cur_r = -1;
-  for (int i = 0; i < q; i++) {
-    qry q = query[i];
-    while (cur_l > q.l) add(--cur_l);
-    while (cur_r < q.r) add(++cur_r);
-    while (cur_l < q.l) remove(cur_l++);
-    while (cur_r > q.r) remove(cur_r--);
-    ans[q.id] = get();
-  }
+const int N = 1e6 + 5;
+int arr[N], freq[N], cnt = 0;
+
+void remove(int idx) {
+	int v = arr[idx];
+	freq[v]--;
+	if (freq[v] == 0) cnt--;
 }
-/* 0 indexed. */
+void add(int idx) {
+	int v = arr[idx];
+	freq[v]++;
+	if (freq[v] == 1) cnt++;
+}
+int get_answer() {
+	return cnt;
+}
+
+int block_size = 700;
+
+struct Query {
+	int l, r, idx;
+	bool operator<(Query other) const {
+		if (l / block_size != other.l / block_size) return l / block_size < other.l / block_size;
+		return r < other.r;
+	}
+};
+
+vector<int> mo_s_algorithm(vector<Query> queries) {
+	vector<int> answers(queries.size());
+	sort(queries.begin(), queries.end());
+
+	// TODO: initialize data structure
+
+	int cur_l = 0;
+	int cur_r = -1;
+	// invariant: data structure will always reflect the range [cur_l, cur_r]
+	for (Query q : queries) {
+		while (cur_l > q.l) {
+			cur_l--;
+			add(cur_l);
+		}
+		while (cur_r < q.r) {
+			cur_r++;
+			add(cur_r);
+		}
+		while (cur_l < q.l) {
+			remove(cur_l);
+			cur_l++;
+		}
+		while (cur_r > q.r) {
+			remove(cur_r);
+			cur_r--;
+		}
+		answers[q.idx] = get_answer();
+	}
+	return answers;
+}
+

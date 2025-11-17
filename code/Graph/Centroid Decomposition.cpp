@@ -1,39 +1,30 @@
-ll n,subsize[mx];
-vector<int>adj[mx];
-bool b[mx];
-int cpar[mx];
-vector<int>ctree[mx];
-
-void calculatesize(ll u,ll par){
-	subsize[u]=1;
-	for(ll i=0;i<(ll)adj[u].size();i++){
-		ll v=adj[u][i];
-		if(v==par or b[v]==true)continue;
-		calculatesize(v,u);
-		subsize[u]+=subsize[v];
-	}
+const int N = 1e5 + 5;
+vector<int> g[N];
+int sz[N], dead[N], cenpar[N];
+void dfs_sz(int u, int p) {
+  sz[u] = 1;
+  for (int v : g[u]) {
+    if (v == p || dead[v]) continue;
+    dfs_sz(v, u);
+    sz[u] += sz[v];
+  }
 }
-ll getcentroid(ll u,ll par,ll n){
-	ll ret=u;
-	for(ll i=0;i<(ll)adj[u].size();i++){
-		ll v=adj[u][i];
-		if(v==par or b[v]==true)continue;
-		if(subsize[v]>(n/2)){
-			ret=getcentroid(v,u,n);
-			break;
-		}
-	}
-	return ret;
+int find_centroid(int num, int u, int p) {
+  for (int v : g[u]) {
+    if (v != p && !dead[v] && 2 * sz[v] > num) {
+      return find_centroid(num, v, u);
+    }
+  }
+  return u;
 }
-void decompose(ll u, int p){
-	calculatesize(u,-1);
-	ll c=getcentroid(u,-1,subsize[u]);
-	b[c]=true;
-	cpar[c] = p;
-	//if(p != -1)ctree[p].push_back(c);
-	for(ll i=0;i<(ll)adj[c].size();i++){
-		ll v=adj[c][i];
-		if(b[v]==true)continue;
-		decompose(v, c);
-	}
+void decompose(int u, int p) {
+  dfs_sz(u, p);
+  int cent = find_centroid(sz[u], u, p);
+  dead[cent] = true;
+  cenpar[cent] = p;
+  for (int v : g[cent]) {
+    if (!dead[v]) {
+      decompose(v, cent);
+    }
+  }
 }

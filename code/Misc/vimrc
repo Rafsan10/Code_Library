@@ -1,14 +1,12 @@
+"install xclip, vim-gtk3
+set nocp ai bs=2 hls ic is lbr ls=2 mouse=a nu ru sc scs smd so=3 sw=2 ts=2 rnu
 filetype plugin indent on
-set rnu wfw hls is ar aw wrap mouse=a
-
-let mapleader=' '
-im jk <esc>
-tno jk <c-w>N
-no <leader>d "_d
-im {<cr> {<cr>}<esc>O
-nn ff :let @+ = expand("%:p")<cr>
-nn cd :cd %:h<cr>
-
-au BufNewFile *.cpp -r ./template.cpp | 14
-
-ca hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \| md5sum \| cut -c-6
+syn on
+map gA m'ggVG"+y''
+inoremap {<CR> {<CR>}<Esc>ko
+nnoremap = mzgg=G`z
+vnoremap <C-k> :s/^\s*\zs/\/\/ /<CR>:nohl<CR>
+nnoremap <C-k> :s/^\s*\zs/\/\/ /<CR>:nohl<CR>
+vnoremap <C-l> :s/^\s*\zs\/\/ //<CR>:nohl<CR>
+nnoremap <C-l> :s/^\s*\zs\/\/ //<CR>:nohl<CR>
+autocmd FileType cpp map <F9> :w<CR> :!clear; g++ --std=c++17 % -DONPC -o %:r && ./%:r<CR>

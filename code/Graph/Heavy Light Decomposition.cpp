@@ -1,73 +1,102 @@
-/*Heavy Light Decomposition
-Build Complexity O(n)
-Query Complexity O(lg^2 n)
-Call init()with number of nodes
-It's probably for the best to not do"using namespace hld"*/
-namespace hld {
-	//N is the maximum number of nodes
-	/*par,lev,size corresponds to parent,depth,subtree-size*/
-	//head[u]is the starting node of the chain u is in
-	//in[u]to out[u]keeps the subtree indices
-	const int N=100000+7;
-	vector<int>g[N];
-	int par[N],lev[N],head[N],size[N],in[N],out[N];
-	int cur_pos,n;
-	//returns the size of subtree rooted at u
-	/*maintains the child with the largest subtree at the front of g[u]*/
-	//WARNING: Don't change anything here specially with size[]if Jon Snow
-	int dfs(int u,int p){
-		size[u]=1,par[u]=p;
-		lev[u]=lev[p]+1;
-		for(auto &v : g[u]){
-			if(v==p)continue;
-			size[u]+=dfs(v,u);
-			if(size[v]>size[g[u].front()]){
-				swap(v,g[u].front());
-			}
-		}
-		return size[u];
-	}
-	//decomposed the tree in an array
-	//note that there is no physical array here
-	void decompose(int u,int p){
-		in[u]=++cur_pos;
-		for(auto &v : g[u]){
-			if(v==p)continue;
-			head[v]=(v==g[u].front()? head[u]: v);
-			decompose(v,u);
-		}
-		out[u]=cur_pos;
-	}
-	//initializes the structure with _n nodes
-	void init(int _n,int root=1){
-		n=_n;
-		cur_pos=0;
-		dfs(root,0);
-		head[root]=root;
-		decompose(root,0);
-	}
-	//checks whether p is an ancestor of u
-	bool isances(int p,int u){
-		return in[p]<=in[u]and out[u]<=out[p];
-	}
-	//Returns the maximum node value in the path u-v
-	ll query(int u,int v){
-		ll ret=-INF;
-		while(!isances(head[u],v)){
-			ret=max(ret,seg.query(1,1,n,in[head[u]],in[u]));
-			u=par[head[u]];
-		}
-		swap(u,v);
-		while(!isances(head[u],v)){
-			ret=max(ret,seg.query(1,1,n,in[head[u]],in[u]));
-			u=par[head[u]];
-		}
-		if(in[v]<in[u])swap(u,v);
-		ret=max(ret,seg.query(1,1,n,in[u],in[v]));
-		return ret;
-	}
-	//Adds val to subtree of u
-	void update(int u,ll val){
-		seg.update(1,1,n,in[u],out[u],val);
-	}
-};
+vector<int> g[N];
+int par[N], dep[N], sz[N];
+void dfs(int u, int p = 0) {
+  sz[u] = 1, par[u] = p;
+  dep[u] = dep[p] + 1;
+  int mx = 0;
+  for (auto& v : g[u]) {
+    if (v == p) continue;
+    dfs(v, u);
+    sz[u] += sz[v];
+    if (sz[v] > mx) {
+      mx = sz[v];
+      swap(v, g[u][0]);
+    }
+  }
+}
+int T, head[N], st[N], en[N];
+
+void dfs_hld(int u, int p = 0) {
+  st[u] = ++T;
+  // arr[T] = a[u];
+  head[u] = (p != 0 && g[p][0] == u) ? head[p] : u;
+  for (auto v : g[u]) {
+    if (v == p) continue;
+    dfs_hld(v, u);
+  }
+  en[u] = T;
+}
+int lca(int a, int b) {
+  for (; head[a] != head[b]; b = par[head[b]]) {
+    if (dep[head[a]] > dep[head[b]]) swap(a, b);
+  }
+  if (dep[a] > dep[b]) swap(a, b);
+  return a;
+}
+int n;
+// process node u upto it's ancestor a
+// if excl is true, a won't process
+i64 chain_process(int a, int u, bool excl = false) {
+  i64 ans = 0;
+  for (; head[u] != head[a]; u = par[head[u]]) {
+    ans = ans + query(1, 1, n, st[head[u]], st[u]);
+  }
+  ans = ans + query(1, 1, n, st[a] + excl, st[u]);
+  return ans;
+}
+
+// process path from node u to v
+// if excl is true, lca won't process
+i64 path_process(int a, int b, bool excl = false) {
+  i64 ans = 0;
+  for (; head[a] != head[b]; b = par[head[b]]) {
+    if (dep[head[a]] > dep[head[b]]) swap(a, b);
+    ans = ans + query(1, 1, n, st[head[b]], st[b]);
+  }
+  if (dep[a] > dep[b]) swap(a, b);
+  ans = ans + query(1, 1, n, st[a] + excl, st[b]);
+  return ans;
+}
+// update path from node u to v
+// if excl is true, lca won't update
+void path_update(int a, int b, int val, bool excl = false) {
+  for (; head[a] != head[b]; b = par[head[b]]) {
+    if (dep[head[a]] > dep[head[b]]) swap(a, b);
+    update(1, 1, n, st[head[b]], st[b], val);
+  }
+  if (dep[a] > dep[b]) swap(a, b);
+  update(1, 1, n, st[a] + excl, st[b], val);
+}
+/*
+     n is global
+     dfs(1);
+     head[1] = 1;
+     dfs_hld(1);
+     build(1, 1, n);
+*/
+void solve() {
+  cin >> n;
+  int q;
+  cin >> q;
+  for (int i = 1; i < n; i++) {
+    int u, v, c;
+    cin >> u >> v >> c;
+    g[u].push_back({v, i});
+    g[v].push_back({u, i});
+    edge_cost[i] = c;
+  }
+  dfs(1);
+  head[1] = 1;
+  dfs_hld(1);
+  for (int i = 1; i < n; i++) {
+    int u = edge_to_ch[i];
+    arr[st[u]] = edge_cost[i];
+  }
+  build(1, 1, n);
+  while (q--) {
+    int u, v, val;
+    cin >> u >> v >> val;
+    path_update(u, v, val, true);
+    cout << path_process(u, v, true) << '\n';
+  }
+}

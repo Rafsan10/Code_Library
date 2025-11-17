@@ -1,0 +1,9 @@
+C++: 
+#pragma GCC optimize("Ofast")
+#pragma GCC target("avx,avx2,fma")
+ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+freopen("input.txt", "r", stdin);
+Python:
+import sys
+input = sys.stdin.readline
+sys.stdout.write("------")
