@@ -58,8 +58,10 @@ const auto rerooter = [](const auto& g, const auto& base,
     for (auto v : g[u]) edge_dp[u].push_back(dp[v]);
     auto dp_exclusive = exclusive(edge_dp[u], base(u), merge_into, u);
     redge_dp[u].reserve(g[u].size());
-    for (int i = 0; i < (int)dp_exclusive.size(); ++i)
-      redge_dp[u].push_back(finalize_merge(dp_exclusive[i], u, i));
+    for (int i = 0; i < (int)dp_exclusive.size(); ++i) {
+      auto merge_value = finalize_merge(dp_exclusive[i], u, i);
+      redge_dp[u].push_back(merge_value);
+    }
     root_dp[u] = finalize_merge(
         n > 1 ? merge_into(dp_exclusive[0], edge_dp[u][0], u, 0) : base(u), u,
         -1);
