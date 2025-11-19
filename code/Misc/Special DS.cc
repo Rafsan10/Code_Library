@@ -6,3 +6,9 @@ template <typename T> using o_set = tree<T, null_type, less<T>, rb_tree_tag, tre
 // *(st.find_by_order(index))
 // st.order_of_key(value)
 
+// Faster hash
+gp_hash_table<int, int> mp;
+// Or
+unordered_map<int, int> mp;
+mp.reserve(n * 2);
+mp.max_load_factor(0.7);
