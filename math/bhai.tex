@@ -79,6 +79,44 @@
     $m = m_kp^k+m_{k-1}p^{k-1}+...+m_1p+m_0$
     $n = n_kp^k+n_{k-1}p^{k-1}+...+n_1p+n_0$
     are the base p expansion.
+    \item Let $n$ and $k$ be non-negative integers, and let $p$ be a prime.
+Let the base-$p$ expansions of $n$ and $k$ be:
+$$
+n = n_m p^m + n_{m-1} p^{m-1} + \dots + n_1 p^1 + n_0 p^0
+$$
+$$
+k = k_m p^m + k_{m-1} p^{m-1} + \dots + k_1 p^1 + k_0 p^0
+$$
+where $0 \le n_i < p$ and $0 \le k_i < p$ are the base-$p$ digits of $n$ and $k$, respectively.
+
+The theorem states:
+$$
+\binom{n}{k} \equiv \prod_{i=0}^m \binom{n_i}{k_i} \pmod{p}
+$$
+\noindent \textbf{Note:} The individual terms $\binom{n_i}{k_i}$ are calculated using standard arithmetic, and the final product is taken modulo $p$.
+
+\item \textbf{Example:} $\binom{10}{2} \pmod{2}$
+\begin{align*}
+n &= 10_{10} = 1010_2 \\
+k &= 2_{10} = 0010_2
+\end{align*}
+Applying Lucas's Theorem:
+$$
+\binom{10}{2} \equiv \binom{1}{0} \cdot \binom{0}{0} \cdot \binom{1}{1} \cdot \binom{0}{0} \pmod{2}
+$$
+$$
+\equiv 1 \cdot 1 \cdot 1 \cdot 1 \equiv 1 \pmod{2}
+$$
+Bitwise check: $1010_2 \mathbf{\&} 0010_2 = 0010_2$. Since $2=2$, the result is 1.
+
+$$
+\binom{n}{k} \pmod{2} =
+\begin{cases}
+1 & \text{if } (n \mathbf{\&} k) = k \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
 \end{itemize}
 \subsubsection{Derangement}
 \vspace{2.5mm}
@@ -324,37 +362,85 @@ $10^{12}$ & 936,966,912,400 & 10,752 \\
 \subsubsection{Miscellaneous}
 \vspace{2.5mm}
 \begin{itemize}
-	\item $2^{100} = 2^{50} \times 2^{50}$
-	\item Fibonacci Matrix: 
-    $\begin{bmatrix} F_n\\ F_{n-1} \end{bmatrix} = 
+    \item $2^{100} = 2^{50} \times 2^{50}$
+    \item Fibonacci Matrix: 
+    $$\begin{bmatrix} F_n\\ F_{n-1} \end{bmatrix} = 
     \begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}^{n-1}
-    \begin{bmatrix} F_1\\ F_0 \end{bmatrix}$
-    \item $\log(n!) = \log 1 + \log 2 + \cdots + \log n$
+    \begin{bmatrix} F_1\\ F_0 \end{bmatrix}$$
+
+       \item $\log(n!) = \log 1 + \log 2 + \cdots + \log n$
     \item $\gcd(a, b) = \gcd(a-b, b)$
     \item Prime $p$ in $n!$: 
-    $\lfloor \frac{n}{p} \rfloor + \lfloor \frac{n}{p^2} \rfloor + \lfloor \frac{n}{p^3} \rfloor + \cdots$
+    $$\left\lfloor \frac{n}{p} \right\rfloor + \left\lfloor \frac{n}{p^2} \right\rfloor + \left\lfloor \frac{n}{p^3} \right\rfloor + \cdots$$
     \item Catalan: 
-    $\binom{2n}{n} - \binom{2n}{n-1}$
+    $$\binom{2n}{n} - \binom{2n}{n-1}$$
     \item Divisors of $p^xq^y$: $(x+1)(y+1)$
-    \item Sum of divisors of $p^xq^y$: \\
-    $(1 + p + p^2 + \cdots + p^x)(1 + q + q^2 + \cdots + q^y)$
+    \item Sum of divisors of $p^xq^y$: 
+    $$(1 + p + p^2 + \cdots + p^x)(1 + q + q^2 + \cdots + q^y)$$
     \item Divisibility rules:
     \begin{itemize}
         \item[\textbf{3}:] Sum of digits divisible by 3
         \item[\textbf{4}:] Last two digits divisible by 4
         \item[\textbf{5}:] Last digit 0 or 5
         \item[\textbf{6}:] Divisible by both 2 and 3
-        \item[\textbf{7}:] Double last digit, subtract from rest
+        \item[\textbf{7}:] Double last digit, subtract from rest. Continue till manageable.
         \item[\textbf{8}:] Last three digits divisible by 8
         \item[\textbf{9}:] Sum of digits divisible by 9
         \item[\textbf{11}:] $(sum\ of\ odd\ digits) - (sum\ of\ even\ digits) \equiv 0 \pmod{11}$
     \end{itemize}
    \item Derangement: $D_n = (n-1)D_{n-2} + (n-1)D_{n-1}$
    \item Golden Ratio: $\Phi = \frac{1 + \sqrt{5}}{2} \approx 1.618034$
-   \item $n$-th Fibonacci: $F_n = \frac{\Phi^n - (1-\Phi)^n}{\sqrt{5}}$
-   \item Stars \& Bars: Solutions of $x_1+x_2+\cdots+x_k=n$ \\
+   \item $n$-th Fibonacci: $$F_n = \frac{\Phi^n - (1-\Phi)^n}{\sqrt{5}}$$
+   \item Stars \& Bars: Solutions of $x_1+x_2+\cdots+x_k=n$ 
    $x_i > 0$: $\binom{n-1}{k-1}$, 
    $x_i \geq 0$: $\binom{n+k-1}{k-1}$
+
+    \item \textbf{Throwing Dice (Matrix Exponentiation)}
+
+    \begin{itemize}
+        \item \textbf{Recurrence Relation}
+        The number of ways to achieve a sum $n$ is given by the linear recurrence:
+        \begin{equation*}
+        \begin{aligned}
+        f(n) = & f(n-1) + f(n-2) + f(n-3) \\
+               & + f(n-4) + f(n-5) + f(n-6)
+        \end{aligned}
+        \end{equation*}
+        with the base case $f(0)=1$ and $f(k)=0$ for $k<0$.
+
+        \item \textbf{State Transition}
+        The relationship between the new state vector ($V_i$) and the old state vector ($V_{i-1}$) is:
+        $$
+        \underbrace{\begin{bmatrix} f(i) \\ f(i-1) \\ f(i-2) \\ f(i-3) \\ f(i-4) \\ f(i-5) \end{bmatrix}}_{V_{i}} =
+        \underbrace{\begin{bmatrix}
+        1 & 1 & 1 & 1 & 1 & 1 \\
+        1 & 0 & 0 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 1 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 1 & 0
+        \end{bmatrix}}_{T}
+        \times
+        \underbrace{\begin{bmatrix} f(i-1) \\ f(i-2) \\ f(i-3) \\ f(i-4) \\ f(i-5) \\ f(i-6) \end{bmatrix}}_{V_{i-1}}
+        $$
+
+        \item \textbf{Reason for Transition Matrix ($T$)}
+        The constants (1/0) implement the recurrence and the shifting of the state vector:
+        
+        \begin{itemize}
+            \item \textbf{Row 1} ($f(n)$): $\mathbf{1\ 1\ 1\ 1\ 1\ 1}$ (Implements the sum).
+            \item \textbf{Row 2} ($f(n-1)$): $\mathbf{1\ 0\ 0\ 0\ 0\ 0}$ (Copies $f(n-1)$).
+            \item \textbf{Row 3} ($f(n-2)$): $\mathbf{0\ 1\ 0\ 0\ 0\ 0}$ (Copies $f(n-2)$).
+            \item \textbf{Row 4} ($f(n-3)$): $\mathbf{0\ 0\ 1\ 0\ 0\ 0}$ (Copies $f(n-3)$).
+            \item \textbf{Row 5} ($f(n-4)$): $\mathbf{0\ 0\ 0\ 1\ 0\ 0}$ (Copies $f(n-4)$).
+            \item \textbf{Row 6} ($f(n-5)$): $\mathbf{0\ 0\ 0\ 0\ 1\ 0}$ (Copies $f(n-5)$).
+        \end{itemize}
+
+        \item \textbf{Final Answer}
+        The $n$-th term is found by: $f(n) = (T^n)_{1,1} \times f(0)$, where $f(0)=1$.
+        $$f(n) = (T^n)_{1,1}$$
+    \end{itemize}
+ 
 \end{itemize}
 
 \subsection{Probability and Expectation}

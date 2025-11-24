@@ -23,7 +23,8 @@ def get_sections():
             except:
                 hash_value = "########"
             subsections.append((relative_path, subsection_name, number_of_lines, hash_value))
-    return sections[1:]
+    # Sort sections by section name (excluding the first empty entry)
+    return sorted(sections[1:], key=lambda x: x[0])
 
 def get_style(filename):
     ext = filename.lower().split('.')[-1]
