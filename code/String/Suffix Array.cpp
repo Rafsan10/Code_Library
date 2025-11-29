@@ -96,3 +96,82 @@ struct SuffixArray {
 	}
 };
 // s.compare(suf[mid], min(n - suf[mid], m), t) -> -1(small), 0(equal), 1(large)
+
+// https://cses.fi/problemset/task/2109/
+// You are given a string of length n. If all of its substrings (not necessarily distinct) are ordered lexicographically, what is the kth smallest of them?
+
+void solve() {
+	string s;
+	cin >> s;
+	int k, n = s.size();
+	cin >> k;
+	SuffixArray suff(s);
+	vector<int> sa(n), pref(n);
+	for (int i = 0; i < n; i++) {
+		sa[suff.rank[i] - 1] = i;
+	}
+	pref[0] = n - sa[0];
+	for (int i = 1; i < n; i++) {
+		pref[i] = pref[i - 1] + n - sa[i];
+	}
+
+	auto get_string = [&](int l, int r) {
+		int sum = pref[r];
+		if (l - 1 >= 0) sum -= pref[l - 1];
+		return sum;
+	};
+
+	int L = 0, R = n - 1;
+	int depth = 0;
+	while (true) {
+		if (depth > 0) {
+			int count = R - L + 1;
+			if (k <= count) {
+				cout << s.substr(sa[L], depth) << '\n';
+				return;
+			}
+			k -= count;
+		}
+		int cur = L;
+		// skip all suffixes which are already ended
+		while (cur <= R && sa[cur] + depth >= n) cur++;
+		assert(cur <= R);
+		
+		while (cur <= R) {
+			// extend to next level with a character c
+			// cur = starting index of current character branch
+			// cur_end = ending index of current character branch
+			// binary search to find cur_end
+			char c = s[sa[cur] + depth];
+			int low = cur, high = R, cur_end = cur;
+			while (low <= high) {
+				int mid = (low + high) / 2;
+				if (sa[mid] + depth < n && s[sa[mid] + depth] == c) {
+					cur_end = mid;
+					low = mid + 1;
+				} else if (sa[mid] + depth >= n) {
+					low = mid + 1;
+				} else {
+					high = mid - 1;
+				}
+			}
+			
+			int total = get_string(cur, cur_end);
+			int branch = total - (cur_end - cur + 1) * depth;
+
+			if (k <= branch) {
+				// search in this branch
+				L = cur;
+				R = cur_end;
+				depth++;
+				goto next_level;
+			} else {
+				// search in next branch
+				k -= branch;
+				cur = cur_end + 1;
+			}
+		}
+
+next_level:;
+	}
+}
