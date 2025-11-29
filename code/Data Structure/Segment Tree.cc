@@ -32,3 +32,22 @@ void update(int ind, int low, int high, int node, int val) {
     update(2 * ind + 1, mid + 1, high, node, val);
   seg[ind] = combine(seg[2 * ind], seg[2 * ind + 1]);
 }
+
+// Maximum subarray sum in range [l, r]
+struct Node {
+	i64 sum, pref, suff, ans;
+	Node() {
+		sum = 0;
+		pref = suff = ans = -inf;
+	}
+};
+Node seg[4 * N];
+Node combine(Node l, Node r) {
+	Node res;
+	res.sum = l.sum + r.sum;
+	res.pref = max(l.pref, l.sum + r.pref);
+	res.suff = max(r.suff, r.sum + l.suff);
+	res.ans = max({l.ans, r.ans, res.pref, res.suff, res.sum});
+	res.ans = max(res.ans, l.suff + r.pref);
+	return res;
+}
