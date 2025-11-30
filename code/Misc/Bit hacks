@@ -10,3 +10,7 @@ next number after x with the same number of bits set.
   __builtin_popcountll(x) // for long long
 # __builtin_clz(x) // number of leading zeros
   __builtin_ctz(x) // number of trailing zeros, they also have long long version
+# bitset<N> b; //N is size of bitset
+  b.count(); // return number of bits set O(N / 64)
+  b.to_string(); // return string representation of bitset
+  b.rot(k) // rotate left by k O(N / 64)
