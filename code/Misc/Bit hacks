@@ -13,4 +13,4 @@ next number after x with the same number of bits set.
 # bitset<N> b; //N is size of bitset
   b.count(); // return number of bits set O(N / 64)
   b.to_string(); // return string representation of bitset
-  b.rot(k) // rotate left by k O(N / 64)
+  b.any() // return true if any bit is set O(N / 64)
