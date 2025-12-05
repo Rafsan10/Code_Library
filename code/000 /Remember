@@ -6,3 +6,4 @@
 # Break the problem into smaller parts (go step by step)
 # Check for negative numbers, zero, one or small cases
 # For problems like making string A to B, try to work backwards from B to A or it may be easier to make both A and B to some C
+# L > R can occur
