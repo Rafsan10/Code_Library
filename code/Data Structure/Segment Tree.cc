@@ -2,35 +2,35 @@ constexpr int N = 100005;
 i64 arr[N], seg[4 * N];
 
 i64 combine(i64 l, i64 r) { return l + r; }
-void build(int ind, int low, int high) {
+void build(int node, int low, int high) {
   if (low == high) {
-    seg[ind] = arr[low];
+    seg[node] = arr[low];
     return;
   }
   int mid = (low + high) / 2;
-  build(2 * ind, low, mid);
-  build(2 * ind + 1, mid + 1, high);
-  seg[ind] = combine(seg[2 * ind], seg[2 * ind + 1]);
+  build(2 * node, low, mid);
+  build(2 * node + 1, mid + 1, high);
+  seg[node] = combine(seg[2 * node], seg[2 * node + 1]);
 }
-i64 query(int ind, int low, int high, int l, int r) {
-  if (low >= l && high <= r) return seg[ind];
+i64 query(int node, int low, int high, int l, int r) {
+  if (low >= l && high <= r) return seg[node];
   if (low > r || high < l) return 0;  // check it!
   int mid = (low + high) / 2;
-  i64 left = query(2 * ind, low, mid, l, r);
-  i64 right = query(2 * ind + 1, mid + 1, high, l, r);
+  i64 left = query(2 * node, low, mid, l, r);
+  i64 right = query(2 * node + 1, mid + 1, high, l, r);
   return combine(left, right);
 }
-void update(int ind, int low, int high, int node, int val) {
+void update(int node, int low, int high, int pos, int val) {
   if (low == high) {
-    seg[ind] = val;
+    seg[node] = val;
     return;
   }
   int mid = (low + high) / 2;
-  if (low <= node && node <= mid)
-    update(2 * ind, low, mid, node, val);
+  if (low <= pos && pos <= mid)
+    update(2 * node, low, mid, pos, val);
   else
-    update(2 * ind + 1, mid + 1, high, node, val);
-  seg[ind] = combine(seg[2 * ind], seg[2 * ind + 1]);
+    update(2 * node + 1, mid + 1, high, pos, val);
+  seg[node] = combine(seg[2 * node], seg[2 * node + 1]);
 }
 
 // Maximum subarray sum in range [l, r]
