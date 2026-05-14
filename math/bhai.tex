@@ -480,18 +480,6 @@ According to Pick’s Theorem We can calculate the area of any polygon by just c
                         \underbrace{\begin{bmatrix} f(i-1) \\ f(i-2) \\ f(i-3) \\ f(i-4) \\ f(i-5) \\ f(i-6) \end{bmatrix}}_{V_{i-1}}
                     $$
 
-              \item \textbf{Reason for Transition Matrix ($T$)}
-                    The constants (1/0) implement the recurrence and the shifting of the state vector:
-
-                    \begin{itemize}
-                        \item \textbf{Row 1} ($f(n)$): $\mathbf{1\ 1\ 1\ 1\ 1\ 1}$ (Implements the sum: $f(n - 1) + f(n - 2) + f(n - 3) + f(n - 4) + f(n - 5) + f(n - 6)$).
-                        \item \textbf{Row 2} ($f(n-1)$): $\mathbf{1\ 0\ 0\ 0\ 0\ 0}$ (Copies $f(n-1)$).
-                        \item \textbf{Row 3} ($f(n-2)$): $\mathbf{0\ 1\ 0\ 0\ 0\ 0}$ (Copies $f(n-2)$).
-                        \item \textbf{Row 4} ($f(n-3)$): $\mathbf{0\ 0\ 1\ 0\ 0\ 0}$ (Copies $f(n-3)$).
-                        \item \textbf{Row 5} ($f(n-4)$): $\mathbf{0\ 0\ 0\ 1\ 0\ 0}$ (Copies $f(n-4)$).
-                        \item \textbf{Row 6} ($f(n-5)$): $\mathbf{0\ 0\ 0\ 0\ 1\ 0}$ (Copies $f(n-5)$).
-                    \end{itemize}
-
               \item \textbf{Final Answer}
                     The $n$-th term is found by: $f(n) = (T^n)_{1,1} \times f(0)$, where $f(0)=1$.
                     $$f(n) = (T^n)_{1,1}$$
