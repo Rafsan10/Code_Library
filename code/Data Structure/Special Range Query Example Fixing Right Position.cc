@@ -72,13 +72,3 @@ void solve() {
 		for (auto l : active[r]) update(l, -1);
 	}
 }
-int32_t main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-	int t = 1;
-	cin >> t;
-	for (int i = 1; i <= t; i++) {
-		// cout << "Case " << i << ": ";
-		solve();
-	}
-}
