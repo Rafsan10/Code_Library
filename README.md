@@ -11,6 +11,10 @@ git clone <repository-url>
 cd Code_Library
 ```
 
+or latest version only
+```bash
+git clone --depth 1 <repository-url>
+```
 ## 2. Install prerequisites
 
 You need:

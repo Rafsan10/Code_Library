@@ -6,7 +6,6 @@
 *.out
 *.toc
 contents.tex
-notebook.pdf
 
 ## Minted directory
 _minted-notebook/*
