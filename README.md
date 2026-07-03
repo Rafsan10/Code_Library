@@ -1,67 +1,95 @@
-# MIST\_EagleForces ICPC Team Notebook
+# MIST_EagleForces ICPC Team Notebook
 
-## Prerequisites
+This repository contains the ICPC team notebook source, including code snippets, math notes, and a build script that generates a PDF version of the notebook.
 
-- [Python 3](https://www.python.org/)
-- A LaTeX distribution with `pdflatex` (e.g., TeX Live)
+## 1. Clone the repository
 
-### Install required packages (Ubuntu/Debian)
+From your terminal, clone the repository and move into it:
+
+```bash
+git clone <repository-url>
+cd Code_Library
+```
+
+## 2. Install prerequisites
+
+You need:
+
+- Python 3
+- A LaTeX distribution with `pdflatex` (for example TeX Live)
+
+On Ubuntu/Debian, install them with:
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y python3 texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+sudo apt-get install -y python3 python3-venv texlive-latex-base texlive-latex-extra texlive-fonts-recommended
 ```
 
-The `minted` package (used for syntax highlighting) requires [Pygments](https://pygments.org/):
+## 3. Create a Python environment
+
+It is recommended to use a virtual environment so the Python dependencies stay isolated:
 
 ```bash
-pip install Pygments
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-Or via apt:
+The Python dependency list is intentionally small and is defined in [requirements.txt](requirements.txt).
 
-```bash
-sudo apt-get install -y python3-pygments
-```
+## 4. Generate the PDF
 
-## Generating the PDF
+Run the build script from the repository root:
 
 ```bash
 python3 generate_pdf.py
 ```
 
-This script will:
-1. Scan the `code/` directory for source files
-2. Generate `contents.tex` with all code sections sorted alphabetically
-3. Run `pdflatex -shell-escape notebook.tex` three times to properly build the table of contents and references
+This will:
 
-The output PDF will be `notebook.pdf`.
+1. Scan the [code](code) directory for source files
+2. Generate [contents.tex](contents.tex) with the notebook contents
+3. Compile [notebook.tex](notebook.tex) with `pdflatex -shell-escape` three times so the table of contents and references are built correctly
 
-## Project Structure
+The final output PDF will be [notebook.pdf](notebook.pdf).
 
-```
-├── notebook.tex          # Main LaTeX template
-├── generate_pdf.py       # PDF generation script
-├── contents.tex          # Auto-generated code listings (do not edit manually)
-├── math/                 # Math reference sheets (combinatorics, probability, etc.)
-└── code/                 # Source code organized by category
-    ├── Data Structure/
-    ├── Dynamic Programming/
-    ├── Game Theory/
-    ├── Geometry/
-    ├── Graph/
-    ├── Misc/
-    ├── Number Theory/
-    ├── Some Algorithms/
-    └── String/
+## 5. How the project works
+
+The repository is organized as follows:
+
+```text
+├── code/              # Contest code snippets grouped by topic
+├── math/              # Math notes and LaTeX helper files
+├── images/            # Images used by the notebook
+├── generate_pdf.py    # Python script that builds the notebook
+├── notebook.tex       # Main LaTeX document
+├── contents.tex       # Auto-generated content file produced by the script
+├── requirements.txt   # Python packages needed by the build script
+└── README.md          # This guide
 ```
 
-## Adding New Code
+### What the build script does
 
-1. Place your source file in the appropriate `code/<Category>/` directory
-2. Supported extensions: `.c`, `.cc`, `.cpp` (C++), `.java` (Java), `.py` (Python). Other files are included as plain text.
-3. Run `python3 generate_pdf.py` to regenerate the PDF
+- Walks through the folders under [code](code)
+- Reads each source file and collects metadata such as filename, line count, and a short hash
+- Writes a LaTeX-ready section into [contents.tex](contents.tex)
+- Calls `pdflatex` repeatedly to generate the final PDF
+
+## 6. Add new content
+
+To add a new algorithm or note:
+
+1. Place the source file in the appropriate folder inside [code](code)
+2. Use a supported extension such as `.cpp`, `.cc`, `.c`, `.java`, or `.py`
+3. Re-run:
+
+```bash
+python3 generate_pdf.py
+```
+
+The notebook will regenerate with your new content included.
 
 ## Acknowledgments
 
-The Python script is a fork of the Stanford ICPC team's notebook generator.
+The Python script is based on the Stanford ICPC team notebook generator approach.
