@@ -5,7 +5,7 @@ int add(int x, int y) {
     return x;
 }
 int mul(int x, int y) {
-    return x * 1LL * y % mod;
+    return (x%mod) * 1LL * (y%mod) % mod;
 }
 int divide(int x, int y) {
     return mul(x, power(y, mod - 2));
