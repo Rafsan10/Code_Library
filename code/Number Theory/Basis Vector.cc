@@ -7,7 +7,6 @@ struct Basis {
         memset(basis, 0, sizeof(basis));
         sz = 0; n = 0;
     }
-    // Inserts x into the basis. Returns true if x expanded the basis, false if it was redundant.
     bool insert(T x) {
         n++;
         for (int i = B - 1; i >= 0; i--) {
@@ -29,7 +28,7 @@ struct Basis {
         }
         return x == 0;
     }
-    // Returns the maximum subset XOR sum (can provide an initial value x)
+    // Returns the maximum subset XOR sum
     T max_xor(T x = 0) { 
         for (int i = B - 1; i >= 0; i--) {
             x = max(x, x ^ basis[i]);
@@ -37,7 +36,7 @@ struct Basis {
         }
         return x;
     }
-    // Finds the k-th DISTINCT subset XOR sum (1-based, k=1 returns 0)
+    // Finds the k-th DISTINCT subset XOR sum in strictly increasing order (1-based, k=1 returns 0)
     T kth(unsigned long long k) {
         if (k < 1 || k > (1ULL << sz)) return -1;
         T x = 0;
