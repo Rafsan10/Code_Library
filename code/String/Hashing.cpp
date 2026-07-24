@@ -58,7 +58,6 @@ int lcp(int i1, int j1, int i2, int j2) {
 			r = mid - 1;
 		}
 	}
- 
 	return ans;
 }
 int compare(int i1, int j1, int i2, int j2) {
