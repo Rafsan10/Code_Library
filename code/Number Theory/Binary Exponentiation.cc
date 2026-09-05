@@ -1,4 +1,4 @@
-int power(long long n, long long k, int mod) {
+int power(long long n, long long k, int mod = 1e9+7) {
   int ans = 1 % mod; n %= mod; if (n < 0) n += mod;
   while (k) {
     if (k & 1) ans = (long long) ans * n % mod;
