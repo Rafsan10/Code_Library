@@ -1,52 +1,33 @@
-const int N = 100005;
-ll arr[N];
-
-// Maximum subarray sum in range [l, r]
 struct Node {
-	ll sum, pref, suff, ans;
-	Node() {
-		sum = 0;
-		pref = suff = ans = -inf;
-	}
+    ll sum;
+    Node() { sum = 0;} 
 };
-Node seg[4 * N];
-Node combine(Node l, Node r) {
-	Node res;
-	res.sum = l.sum + r.sum;
-	res.pref = max(l.pref, l.sum + r.pref);
-	res.suff = max(r.suff, r.sum + l.suff);
-	res.ans = max({l.ans, r.ans, res.pref, res.suff, res.sum});
-	res.ans = max(res.ans, l.suff + r.pref);
-	return res;
-}
-void build(int node, int low, int high) {
-  if (low == high) {
-    seg[node].sum = arr[low];
-    return;
-  }
-  int mid = (low + high) / 2;
-  build(2 * node, low, mid);
-  build(2 * node + 1, mid + 1, high);
-  seg[node] = combine(seg[2 * node], seg[2 * node + 1]);
-}
-Node query(int node, int low, int high, int l, int r) {
-  if (low >= l && high <= r) return seg[node];
-  if (low > r || high < l) return Node();  // check it!
-  int mid = (low + high) / 2;
-  Node left = query(2 * node, low, mid, l, r);
-  Node right = query(2 * node + 1, mid + 1, high, l, r);
-  return combine(left, right);
-}
-void update(int node, int low, int high, int pos, int val) {
-  if (low == high) {
-    seg[node].sum = val;
-    return;
-  }
-  int mid = (low + high) / 2;
-  if (low <= pos && pos <= mid)
-    update(2 * node, low, mid, pos, val);
-  else
-    update(2 * node + 1, mid + 1, high, pos, val);
-  seg[node] = combine(seg[2 * node], seg[2 * node + 1]);
-}
 
+struct ST {
+    int n; vector<Node> seg;
+    ST(int _n) : n(_n), seg(4*_n+5) {}
+
+    Node combine(Node l, Node r) {
+        Node res; res.sum = l.sum + r.sum;
+        return res;
+    }
+    void build(int node, int l, int r, const vector<ll>& a) {
+        if (l == r) { seg[node].sum = a[l]; return; }
+        int mid = (l + r) >> 1;
+        build(node<<1, l, mid, a); build(node<<1|1, mid+1, r, a);
+        seg[node] = combine(seg[node<<1], seg[node<<1|1]);
+    }
+    void update(int node, int l, int r, int pos, ll v) {
+        if (l == r) { seg[node].sum = v; return; }
+        int mid = (l + r) >> 1;
+        if (pos <= mid) update(node<<1, l, mid, pos, v);
+        else update(node<<1|1, mid+1, r, pos, v);
+        seg[node] = combine(seg[node<<1], seg[node<<1|1]);
+    }
+    Node query(int node, int l, int r, int ql, int qr) {
+        if (ql > r || qr < l) return Node();
+        if (ql <= l && r <= qr) return seg[node];
+        int mid = (l + r) >> 1;
+        return combine(query(node<<1, l, mid, ql, qr), query(node<<1|1, mid+1, r, ql, qr));
+    }
+};

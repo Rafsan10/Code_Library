@@ -12,12 +12,11 @@
 
 struct Node {
     ll sum;
-    Node(ll _sum = 0) { sum = _sum; } 
+    Node(ll _sum = 0) { sum = _sum; }
 };
-
-struct LazySegTree {
+struct STLazy {
     int n; vector<Node> seg; vector<ll> lzAdd, lzSet; vector<bool> hasSet;
-    LazySegTree(int _n) : n(_n), seg(4*_n+5), lzAdd(4*_n+5, 0), lzSet(4*_n+5, 0), hasSet(4*_n+5, 0) {}
+    STLazy(int _n) : n(_n), seg(4*_n+5), lzAdd(4*_n+5, 0), lzSet(4*_n+5, 0), hasSet(4*_n+5, 0) {}
 
     Node combine(Node l, Node r) {
         Node res; res.sum = l.sum + r.sum; 
@@ -64,9 +63,4 @@ struct LazySegTree {
         int mid = (l + r) >> 1;
         return combine(query(node<<1, l, mid, ql, qr), query(node<<1|1, mid+1, r, ql, qr));
     }
-
-    void build(const vector<ll>& a) { build(1, 1, n, a); } // Assuming 'a' is 1-indexed up to n
-    void add(int l, int r, ll v) { update(1, 1, n, l, r, v, 1); }
-    void set(int l, int r, ll v) { update(1, 1, n, l, r, v, 2); }
-    Node query(int l, int r) { return query(1, 1, n, l, r); }
 };
