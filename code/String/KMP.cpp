@@ -1,4 +1,4 @@
-vector<int> prefix_function(string s) {
+vector<int> prefix_function(const string &s) {
   int n = (int)s.length();
   vector<int> pi(n);
   for (int i = 1; i < n; i++) {
@@ -9,7 +9,7 @@ vector<int> prefix_function(string s) {
   }
   return pi;
 }
-vector<int> find_matches(string text, string pat) {
+vector<int> find_matches(const string &text, const string &pat) {
   int n = pat.length(), m = text.length();
   string s = pat + "$" + text;
   vector<int> pi = prefix_function(s), ans;
