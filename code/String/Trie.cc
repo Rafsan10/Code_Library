@@ -1,56 +1,46 @@
-const int N = 26;
-char BASE = 'A';
-class Node {
- public:
-  int EoW;
-  Node* child[N];
-  Node() {
-    EoW = 0;
-    for (int i = 0; i < N; i++) child[i] = NULL;
-  }
-};
-Node* root = new Node();
+struct Trie {
+    static const int K = 26;
+    static const char BASE = 'a'; 
+    struct Node {
+        int nxt[K]{};  // {} zero-initializes the array
+        int eow = 0, cnt = 0;
+    };
+    vector<Node> t;
+    Trie() : t(1) {} // Initializes with root at index 0 
 
-void insert(Node* node, string s) {
-  for (size_t i = 0; i < s.size(); i++) {
-    int r = s[i] - BASE;
-    if (node->child[r] == NULL) node->child[r] = new Node();
-    node = node->child[r];
-  }
-  node->EoW += 1;
-}  // insert(root, s);
-
-int search(Node* node, string s) {
-  for (size_t i = 0; i < s.size(); i++) {
-    int r = s[i] - BASE;
-    if (node->child[r] == NULL) return 0;
-    node = node->child[r];
-  }
-  return node->EoW;
-}  // search(root, s);
-
-void print(Node* node, string s = "") {
-  if (node->EoW) cout << s << "\n";
-  for (int i = 0; i < N; i++) {
-    if (node->child[i] != NULL) {
-      char c = i + BASE;
-      print(node->child[i], s + c);
+    //d = 1 for insert, d = -1 for erase
+    void insert(const string& s, int d = 1) { 
+        int u = 0;
+        t[u].cnt += d;
+        for (char c : s) {
+            int v = c - BASE;
+            if (!t[u].nxt[v]) {
+                t[u].nxt[v] = t.size();
+                t.emplace_back();
+            }
+            u = t[u].nxt[v];
+            t[u].cnt += d;
+        }
+        t[u].eow += d;
     }
-  }
-}  // print whole trie
-
-void remove(Node* node, string s) {
-  for (size_t i = 0; i < s.size(); i++) {
-    int r = s[i] - base;
-    if (node->child[r] == NULL) return;
-    node = node->child[r];
-  }
-  node->EoW--;
-}  // remove(root, s)
-
-void delete_trie(Node* node) {
-  for (int i = 0; i < N; i++) {
-    if (node->child[i] != NULL) delete_trie(node->child[i]);
-  }
-  delete node;
-}  // delete full trie
+    
+    int search(const string& s) { 
+        int u = 0;
+        for (char c : s) {
+            int v = c - BASE;
+            if (!t[u].nxt[v]) return 0;
+            u = t[u].nxt[v];
+        }
+        return t[u].eow; 
+    }
+    
+    int count_prefix(const string& s) {
+        int u = 0;
+        for (char c : s) {
+            int v = c - BASE;
+            if (!t[u].nxt[v]) return 0;
+            u = t[u].nxt[v];
+        }
+        return t[u].cnt; 
+    }
+};
