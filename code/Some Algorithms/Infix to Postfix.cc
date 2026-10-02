@@ -13,7 +13,6 @@ int priority(char op) {
     if (op == '^') return 4;
     return -1;
 }
-
 void process_op(string& output, char op) {
     if (op < 0) {
         switch (-op) {
@@ -45,7 +44,6 @@ void process_op(string& output, char op) {
         }
     }
 }
-
 string InfixToPostFix(string& s) {
     string output;            
     stack<char> op;          

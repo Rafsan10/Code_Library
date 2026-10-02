@@ -1,7 +1,6 @@
 struct DSU {
   vector<int> par, sz, minElmt, maxElmt, cntElmt;
   int cc;
-
  public:
   DSU(int n) {
     par.resize(n + 1);

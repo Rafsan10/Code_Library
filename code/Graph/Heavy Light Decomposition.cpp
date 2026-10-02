@@ -1,7 +1,6 @@
 vector<pair<int, int>> g[N];
 int edge_to_ch[N];
 int par[N], dep[N], sz[N];
-
 void dfs(int u, int p = 0) {
 	sz[u] = 1, par[u] = p;
 	dep[u] = dep[p] + 1;
@@ -17,9 +16,7 @@ void dfs(int u, int p = 0) {
 		}
 	}
 }
-
 int T, head[N], st[N], en[N];
-
 void dfs_hld(int u, int p = 0) {
 	st[u] = ++T;
 	head[u] = (p != 0 && g[p][0].first == u) ? head[p] : u;

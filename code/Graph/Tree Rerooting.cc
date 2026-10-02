@@ -24,7 +24,6 @@ const auto rerooter = [](const auto& g, const auto& base,
   using Value = std::decay_t<decltype(finalize_merge(base(0), 0, 0))>;
   std::vector<Value> root_dp(n), dp(n);
   std::vector<std::vector<Value>> edge_dp(n), redge_dp(n);
-
   std::vector<int> bfs, parent(n);
   bfs.reserve(n);
   bfs.push_back(0);
@@ -36,7 +35,6 @@ const auto rerooter = [](const auto& g, const auto& base,
       bfs.push_back(v);
     }
   }
-
   for (int i = n - 1; i >= 0; --i) {
     int u = bfs[i];
     int p_edge_index = -1;

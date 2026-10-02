@@ -6,7 +6,6 @@ using namespace std;
 #else
 #define debug(...) 1
 #endif
-
 const int N = 30000 + 5;
 int arr[N];
 struct Node {
@@ -19,7 +18,6 @@ struct Node {
 	}
 };
 Node* versions[N];
-
 Node* build(int l, int r) {
 	Node* node = new Node();
 	if (l == r) {
@@ -32,7 +30,6 @@ Node* build(int l, int r) {
 	node->val = node->lc->val + node->rc->val;
 	return node;
 }
-
 int query(Node* node, int l, int r, int ql, int qr) {
 	if (l > qr || r < ql) return 0;
 	if (ql <= l && r <= qr) {
@@ -43,7 +40,6 @@ int query(Node* node, int l, int r, int ql, int qr) {
 	int right = query(node->rc, mid + 1, r, ql, qr);
 	return left + right;
 }
-
 Node* update(Node* node, int l, int r, int ind, int val) {
 	Node* newnode = new Node();
 	if (l == r) {
@@ -61,7 +57,6 @@ Node* update(Node* node, int l, int r, int ind, int val) {
 	newnode->val = newnode->lc->val + newnode->rc->val;
 	return newnode;
 }
-
 void solve() {
 	int n;
 	cin >> n;
@@ -70,21 +65,16 @@ void solve() {
 		cin >> arr[i];
 		comp.push_back(arr[i]);
 	}
-
 	sort(comp.begin(), comp.end());
 	comp.erase(unique(comp.begin(), comp.end()), comp.end());
 	int sz = comp.size();
-
 	for (int i = 1; i <= n; i++) {
 		arr[i] = lower_bound(comp.begin(), comp.end(), arr[i]) - comp.begin();
 	}
-
 	versions[0] = build(0, sz - 1);
-
 	for (int v = 1; v <= n; v++) {
 		versions[v] = update(versions[v - 1], 0, sz - 1, arr[v], +1);
 	}
-
 	int q;
 	cin >> q;
 	vector<int> ans(q + 1);
@@ -111,4 +101,3 @@ void solve() {
 		cout << ans[i] << '\n';
 	}
 }
-

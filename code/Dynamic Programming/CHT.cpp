@@ -17,7 +17,6 @@ public:
   }
   T query(const T &x) {
     assert(!lines.empty());
-
     int L = 0, R = lines.size() - 1;
     while (L != R) {
       int mid1 = L + (R - L) / 3;
@@ -27,7 +26,6 @@ public:
       ) R = mid2 - 1;
       else L = mid1 + 1;
     }
-
     T res = lines[L].x * x + lines[L].y;
     return maximum ? res : -res;
   }

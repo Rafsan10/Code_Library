@@ -11,7 +11,6 @@ int maxarray(int n) {
   }
   return sum;
 }
-
 int maxmatrix(int n) {
   int sum = -100000000, max = 0;
   for (int i = 1; i <= n; i++) {

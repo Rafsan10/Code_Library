@@ -2,7 +2,6 @@ const int N = 2e5 + 5;
 vector < int > g[N];
 int vis[N], st[N], low[N], adjComp[N];
 int clk, n;
-
 void dfs(int u, int p) {
   vis[u] = 1;
   ++clk;

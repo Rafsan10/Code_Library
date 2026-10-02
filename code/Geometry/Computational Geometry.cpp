@@ -1,14 +1,12 @@
 typedef long long int T;
 typedef double Tf;
 Tf eps = 1e-10;
-
 // int sgn(Tf x)
 // {
 //     if (fabs(x) < eps) return 0;
 //     if (x > 0) return 1;
 //     return -1;
 // }
-
 int sgn(T x) {
   if (x == 0) return 0;
   if (x > 0)
@@ -47,9 +45,7 @@ struct point {
 T dot(point a, point b) { return a.x * b.x + a.y * b.y; }
 T cross(point a, point b) { return a.x * b.y - b.x * a.y; }
 T orien(point a, point b, point c) { return cross(a - b, a - c); }
-
 Tf area(point a, point b, point c) { return abs(orien(a, b, c)) / (Tf)2; }
-
 struct segment {
   point a, b;
   bool onSegment(point p) {

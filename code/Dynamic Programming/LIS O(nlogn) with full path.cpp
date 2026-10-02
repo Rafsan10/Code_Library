@@ -4,7 +4,6 @@ int LIS(vector<int>& v) {
   for (int x:v) { auto it = lower_bound(seq.begin(),seq.end(),x);
     if(it==seq.end()) seq.push_back(x); else *it=x; } return seq.size();
 }
-
 //2. LIS with Reconstruction
 vector<int> getLIS(vector<int>& v) {
   int n=v.size(); vector<int> seq, id, p(n,-1), ans;
@@ -18,7 +17,6 @@ vector<int> getLIS(vector<int>& v) {
   for(int c=id.empty()?-1:id.back(); c!=-1; c=p[c]) ans.push_back(v[c]);
   reverse(ans.begin(),ans.end()); return ans;
 }
-
 //3. SEGTREE LIS WRAPPER: For Weights, Counts, and Restrictions. O(N log N)
 //Assumes you have a Point Update, Range Max Query SegTree ready.
 ll getLIS_SegTree(vector<int>& a, vector<ll>& w) {

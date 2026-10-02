@@ -10,7 +10,6 @@ int orientation(point a, point b, point c) {
     return 1;  // anticlockwise
   return 0;    // collinear
 }
-
 bool clockwise(point a, point b, point c, bool include_collinear) {
   int o = orientation(a, b, c);
   if (o < 0) return true;
@@ -25,7 +24,6 @@ ll distance_sq(point a, point b) {
   ll d = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
   return d;
 }
-
 void print(vector<point>& v) {
   for (auto it : v) {
     cout << "(" << it.x << ", " << it.y << ")" << "\n";

@@ -7,7 +7,6 @@ struct Trie {
     };
     vector<Node> t;
     Trie() : t(1) {} // Initializes with root at index 0 
-
     //d = 1 for insert, d = -1 for erase
     void insert(const string& s, int d = 1) { 
         int u = 0;
@@ -23,7 +22,6 @@ struct Trie {
         }
         t[u].eow += d;
     }
-    
     int search(const string& s) { 
         int u = 0;
         for (char c : s) {
@@ -33,7 +31,6 @@ struct Trie {
         }
         return t[u].eow; 
     }
-    
     int count_prefix(const string& s) {
         int u = 0;
         for (char c : s) {

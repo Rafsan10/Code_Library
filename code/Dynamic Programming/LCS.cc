@@ -9,7 +9,6 @@ for (int i = 1; i <= s.size(); i++) {
   }
 }
 cout << dp[s.size()][t.size()] << "\n";
-
 // Any LCS String
 string a;
 int i = s.size();
@@ -25,7 +24,6 @@ while (i > 0 && j > 0) {
 }
 reverse(a.begin(), a.end());
 cout << a << "\n";
-
 // Lexicographically smallest LCS
 vector<vector<string>> dpp(s.size() + 1, vector<string>(t.size() + 1));
 for (int i = 1; i <= s.size(); i++) {
@@ -41,7 +39,6 @@ for (int i = 1; i <= s.size(); i++) {
   }
 }
 cout << dpp[s.size()][t.size()] << "\n";
-
 // number of distinct LCS sequences
 int MOD = 1e9 + 7;
 vector<vector<int>> cnt(s.size() + 1, vector<int>(t.size() + 1, 1));

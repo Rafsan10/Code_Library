@@ -1,9 +1,6 @@
 bool delim(char c) { return c == ' '; }
-
 bool is_op(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
-
 bool is_unary(char c) { return c == '+' || c == '-'; }
-
 int priority(char op) {
   if (op < 0)  // unary operator
     return 3;
@@ -11,7 +8,6 @@ int priority(char op) {
   if (op == '*' || op == '/') return 2;
   return -1;
 }
-
 void process_op(stack<int>& st, char op) {
   if (op < 0) {
     int l = st.top();
@@ -45,14 +41,12 @@ void process_op(stack<int>& st, char op) {
     }
   }
 }
-
 int evaluate(string& s) {
   stack<int> st;
   stack<char> op;
   bool may_be_unary = true;
   for (int i = 0; i < (int)s.size(); i++) {
     if (delim(s[i])) continue;
-
     if (s[i] == '(') {
       op.push('(');
       may_be_unary = true;
@@ -83,7 +77,6 @@ int evaluate(string& s) {
       may_be_unary = false;
     }
   }
-
   while (!op.empty()) {
     process_op(st, op.top());
     op.pop();

@@ -6,7 +6,6 @@ struct BitTrie {
     };
     vector<Node> t;
     BitTrie() : t(1) {} // Initializes with root at index 0
-
     //d = 1 for insert, d = -1 for remove
     void insert(long long x, int d = 1) { 
         int u = 0;
@@ -21,7 +20,6 @@ struct BitTrie {
             t[u].cnt += d;
         }
     }
-    
     long long query(long long x) {
         if (!t[0].cnt) return 0;
         int u = 0;

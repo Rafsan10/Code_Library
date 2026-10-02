@@ -63,11 +63,9 @@ struct SA {
         }
         t[q].lnk = t[cur].lnk = clone;
     }
-
     void build(const string& s) {
         for (int i = 0; i < s.size(); i++) add(s[i], i);
     }
-
     // Topo Sort + Suffix link Tree DP (Calculates exact frequency of each state)
     void count() {
         int n = t.size(); ord.resize(n);
@@ -77,9 +75,7 @@ struct SA {
         for (int i = 0; i < n; i++) ord[--c[t[i].len]] = i;
         for (int i = n - 1; i > 0; i--) t[t[ord[i]].lnk].cnt += t[ord[i]].cnt;
     }
-
     void reset_dp() { for (auto& node : t) node.dp = -1; }
-
     // DAG DP (Calculates valid paths for K-th substring, or total substrings)
     // MAKE SURE to call count() first if dist == false!
     long long calc_dp(int u, bool dist) { 

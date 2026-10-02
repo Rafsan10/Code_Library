@@ -27,7 +27,6 @@ struct BigInteger {
     } else
       return BigInteger(res.substr(1));
   }
-
   // Overload - operator to subtract
   // first check which number is greater and then subtract
   BigInteger operator-(const BigInteger& b) {
@@ -59,7 +58,6 @@ struct BigInteger {
     if (i == n) return BigInteger("0");
     return BigInteger(res.substr(i));
   }
-
   // Overload * operator to multiply
   // two BigInteger objects
   BigInteger operator*(const BigInteger& b) {
@@ -82,7 +80,6 @@ struct BigInteger {
     if (i == n) return BigInteger("0");
     return BigInteger(res.substr(i));
   }
-
   // Overload << operator to output
   // BigInteger object
   friend ostream& operator<<(ostream& out, const BigInteger& b) {

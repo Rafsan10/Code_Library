@@ -13,7 +13,6 @@ void Divisors(int n) {
         k++;
         n /= Prime[i];
       }
-
       sum *= (k + 1);  // NOD
       totalP += k;
       int s = 0, p = 1;

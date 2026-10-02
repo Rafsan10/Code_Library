@@ -5,7 +5,6 @@ We need to count "good subarrays" [l, r] where:
 2. a[l] exists somewhere in b[l...r]
 3. a[r] does NOT exist in b[l...r]
 */
-
 #include <bits/stdc++.h>
 using namespace std;
 #define i64 long long

@@ -1,11 +1,9 @@
 // https://www.spoj.com/problems/GIVEAWAY/
 // 0 l r k : count of numbers >= k in [l,r]
 // 1 idx val : update a[idx] = val
-
 const int N = 5e5 + 5, BLK = 700;
 vector<int> block[N / BLK + 5];
 int get_block(int idx) { return idx / BLK; }
-
 void solve() {
     int n;
     cin >> n;
@@ -66,4 +64,3 @@ void solve() {
         }
     }
 }
-

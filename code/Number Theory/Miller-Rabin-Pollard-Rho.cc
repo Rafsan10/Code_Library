@@ -27,7 +27,6 @@ bool MillerRabin(u64 n, int iter = 5) {  // returns true if n is probably prime,
     d >>= 1;
     s++;
   }
-
   for (int i = 0; i < iter; i++) {
     int a = 2 + rand() % (n - 3);
     if (check_composite(n, a, d, s)) return false;

@@ -2,7 +2,6 @@ struct Node {
     ll sum;
     Node() { sum = 0;} 
 };
-
 struct ST {
     int n; vector<Node> seg;
     ST(int _n) : n(_n), seg(4*_n+5) {}

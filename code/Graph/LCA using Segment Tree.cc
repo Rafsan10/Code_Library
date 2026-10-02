@@ -2,9 +2,7 @@ struct LCA {
 	vector<int> height, euler, first, segtree, parent;
 	vector<bool> visited;
 	vector<vector<int>> jump;
-
 	int n;
-
 	LCA(vector<vector<int>> &adj, int root = 0) {
 		n = adj.size();
 		height.resize(n);
@@ -16,13 +14,11 @@ struct LCA {
 		int m = euler.size();
 		segtree.resize(m * 4);
 		build(1, 0, m - 1);
-
 		jump.resize(n, vector<int>(32, -1));
 
 		for(int i=0;i<n;i++) {
 			jump[i][0] = parent[i];
 		}
-
 		for(int j=1;j<20;j++) {
 			for(int i=0;i<n;i++) {
 				int mid = jump[i][j-1];
@@ -30,7 +26,6 @@ struct LCA {
 			}
 		}
 	}
-
 	void dfs(vector<vector<int>> &adj, int node, int h = 0) {
 		visited[node] = true;
 		height[node] = h;
@@ -44,7 +39,6 @@ struct LCA {
 			}
 		}
 	}
-
 	void build(int node, int b, int e) {
 		if (b == e) {
 			segtree[node] = euler[b];
@@ -56,7 +50,6 @@ struct LCA {
 			segtree[node] = (height[l] < height[r]) ? l : r;
 		}
 	}
-
 	int query(int node, int b, int e, int L, int R) {
 		if (b > R || e < L)
 			return -1;
@@ -72,14 +65,12 @@ struct LCA {
 			return left;
 		return height[left] < height[right] ? left : right;
 	}
-
 	int lca(int u, int v) {
 		int left = first[u], right = first[v];
 		if (left > right)
 			swap(left, right);
 		return query(1, 0, euler.size() - 1, left, right);
 	}
-
 	int kthParent(int u, int k) {
 		for(int i = 20; i >= 0; i--) {
 			if(k & (1LL << i)) u = jump[u][i];
