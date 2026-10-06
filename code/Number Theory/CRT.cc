@@ -11,6 +11,8 @@ ll CRT(vector<Congruence> const &congruences){
     ll M_i = M / congruence.m;
     ll N_i = mod_inv(M_i, congruence.m);
     solution = (solution + a_i * M_i % M * N_i) % M;
+    // for overflow use __int128_t
+    //solution = (solution + (__int128_t)c.a * M_i% M * N_i) % M;
   }
   return solution;
 }
