@@ -15,7 +15,7 @@ ll crt(vector<ll>& r, vector<ll>& m){
   for (int i = 1; i < r.size(); ++i){
     x = crt(x, M, r[i], m[i]);
     ll g = __gcd(M, m[i]);
-    M = (M/g)*(m[i]/g);
+    M = (M/g)*m[i];
   }
   return x;
 }
