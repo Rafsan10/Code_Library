@@ -1,7 +1,6 @@
-
-// count the numbers between 1 and n (inclusive) that are not divisible by any
-// of the integers in the given array a
-// is n - (div by one number - div by two number + div by three number - ...)
+// count numbers in [1, n] not divisible by any of the
+// integers in the given array a. It is n - (div by one
+// number - div by two numbers + div by three - ...)
 int PIE(int div[], int n, int num) {
   int sum = 0;
   for (int msk = 1; msk < (1 << n); ++msk) {

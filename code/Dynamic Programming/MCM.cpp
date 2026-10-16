@@ -7,7 +7,8 @@ int MCM(int i, int j) {
   int mn = INT_MAX;
   for (int k = i; k < j; k++) {
     int x = mn;
-    mn = min(mn, MCM(i, k) + MCM(k + 1, j) + v[i - 1] * v[k] * v[j]);
+    mn = min(mn, MCM(i, k) + MCM(k + 1, j)
+                 + v[i - 1] * v[k] * v[j]);
     if (x != mn) mark[i][j] = k;
   }
   return dp[i][j] = mn;

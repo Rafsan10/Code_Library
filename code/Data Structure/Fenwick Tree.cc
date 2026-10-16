@@ -16,7 +16,8 @@ int query(int ind) {
 struct Fenwick2D {
   vector<vector<int>> t;
   int n, m;
-  Fenwick2D(int n, int m) : n(n), m(m), t(n + 1, vector<int>(m + 1, 0)) {}
+  Fenwick2D(int n, int m)
+      : n(n), m(m), t(n + 1, vector<int>(m + 1, 0)) {}
   void update(int i, int j, int v) {
     for (int x = i; x <= n; x += x & -x)
       for (int y = j; y <= m; y += y & -y) t[x][y] += v;
@@ -28,7 +29,7 @@ struct Fenwick2D {
     return s;
   }
   int query(int r1, int c1, int r2, int c2) {
-    return query(r2, c2) - query(r1 - 1, c2) - query(r2, c1 - 1) +
-           query(r1 - 1, c1 - 1);
+    return query(r2, c2) - query(r1 - 1, c2)
+         - query(r2, c1 - 1) + query(r1 - 1, c1 - 1);
   }
 };

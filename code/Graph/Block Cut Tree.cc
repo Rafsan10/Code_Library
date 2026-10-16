@@ -15,7 +15,8 @@ void dfs(int u, int p) {
       child++;
       dfs(v, u);
       low[u] = min(low[u], low[v]);
-      if ((p == -1 && child > 1) || (p != -1 && low[v] >= disc[u])) {
+      if ((p == -1 && child > 1) ||
+          (p != -1 && low[v] >= disc[u])) {
         is_art[u] = 1;
         vector<int> block;
         while (stk.top() != v) {

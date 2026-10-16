@@ -1,7 +1,6 @@
 const int N = 1e7 + 3;
 vector<int> primes;
 int notprime[N];
-
 void sieve() {
   primes.push_back(2);
   for (int i = 4; i < N; i += 2)

@@ -28,7 +28,7 @@ struct BigInteger {
       return BigInteger(res.substr(1));
   }
   // Overload - operator to subtract
-  // first check which number is greater and then subtract
+  // first check which number is greater, then subtract
   BigInteger operator-(const BigInteger& b) {
     string a = str;
     string c = b.str;
@@ -82,7 +82,8 @@ struct BigInteger {
   }
   // Overload << operator to output
   // BigInteger object
-  friend ostream& operator<<(ostream& out, const BigInteger& b) {
+  friend ostream& operator<<(ostream& out,
+                             const BigInteger& b) {
     out << b.str;
     return out;
   }

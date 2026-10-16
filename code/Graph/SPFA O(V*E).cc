@@ -41,7 +41,8 @@ void SPFA(int v0) {
     u = q[h];
     for (int j = 1; j <= a[u][0]; j++) {
       v = a[u][j];
-      if (d[u] + w[u][v] < d[v])  // change to > if calculating longest path
+      // change to > if calculating longest path
+      if (d[u] + w[u][v] < d[v])
       {
         d[v] = d[u] + w[u][v];
         if (!f[v]) {

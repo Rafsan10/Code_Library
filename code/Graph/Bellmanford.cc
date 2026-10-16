@@ -6,7 +6,8 @@ void bellmanFord(int num_of_nd, int src) {
         int u = i;
         int v = it.first;
         int wt = it.second;
-        if (dist[u] != inf && ((dist[u] + wt) < dist[v])) {
+        if (dist[u] != inf &&
+            ((dist[u] + wt) < dist[v])) {
           if (step == num_of_nd - 1) {
             cout << "Negative cycle found\n ";
             return;
@@ -17,6 +18,7 @@ void bellmanFord(int num_of_nd, int src) {
       }
     }
   }
-  for (int i = 1; i <= num_of_nd; i++) cout << dist[i] << " ";
+  for (int i = 1; i <= num_of_nd; i++)
+    cout << dist[i] << " ";
   cout << endl;
 }

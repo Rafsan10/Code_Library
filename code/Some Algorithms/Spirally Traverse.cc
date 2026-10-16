@@ -12,7 +12,8 @@ vector<int> spirallyTraverse(vector<vector<int>>& mat) {
     vis[r][c] = true;
     int newR = r + dr[idx];
     int newC = c + dc[idx];
-    if (0 <= newR && newR < m && 0 <= newC && newC < n && !vis[newR][newC]) {
+    if (0 <= newR && newR < m && 0 <= newC && newC < n
+        && !vis[newR][newC]) {
       r = newR;
       c = newC;
     } else {

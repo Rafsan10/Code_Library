@@ -1,4 +1,4 @@
-vector<int> topologicalSort(int V, vector<vector<int>>& g) {
+vector<int> topoSort(int V, vector<vector<int>>& g) {
   vector<int> inDegree(V, 0);
   vector<int> result;
   queue<int> q;
@@ -23,11 +23,10 @@ vector<int> topologicalSort(int V, vector<vector<int>>& g) {
       }
     }
   }
-  // You may need to check inDegree of all the vertices is 0
+  // May need to check inDegree of all vertices is 0
   if (result.size() != V) {
-    cout << "Graph contains a cycle, topological sort not possible!" << endl;
+    cout << "Graph has a cycle, no topo sort!" << endl;
     return {};
   }
-
   return result;
 }

@@ -1,7 +1,7 @@
 int SOD_upto_N(int N) { // sqrt(N)
   int res = 0;
   for (int i = 1; i <= N; i++) {
-    int j = N / (N / i);  // Last number with same quotient
+    int j = N / (N / i); // Last with same quotient
     res += (N / i) * (i + j) * (j - i + 1) / 2;
     i = j;
   }

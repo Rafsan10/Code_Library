@@ -29,7 +29,9 @@ int lca(int u, int v) {
   }
   return parent[u][0];
 }
-int dist(int u, int v) { return depth[u] + depth[v] - 2 * depth[lca(u, v)]; }
+int dist(int u, int v) {
+  return depth[u] + depth[v] - 2 * depth[lca(u, v)];
+}
 int kthParent(int u, int k) {
   for (int i = 0; i < LG; i++) {
     if (k >> i & 1) {

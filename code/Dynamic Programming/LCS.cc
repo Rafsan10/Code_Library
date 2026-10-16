@@ -1,5 +1,6 @@
 // LCS DP Table and LCS Length
-vector<vector<int>> dp(s.size() + 1, vector<int>(t.size() + 1));
+vector<vector<int>> dp(s.size() + 1,
+                       vector<int>(t.size() + 1));
 for (int i = 1; i <= s.size(); i++) {
   for (int j = 1; j <= t.size(); j++) {
     if (s[i - 1] == t[j - 1])
@@ -25,7 +26,8 @@ while (i > 0 && j > 0) {
 reverse(a.begin(), a.end());
 cout << a << "\n";
 // Lexicographically smallest LCS
-vector<vector<string>> dpp(s.size() + 1, vector<string>(t.size() + 1));
+vector<vector<string>> dpp(s.size() + 1,
+                      vector<string>(t.size() + 1));
 for (int i = 1; i <= s.size(); i++) {
   for (int j = 1; j <= t.size(); j++) {
     if (s[i - 1] == t[j - 1])
@@ -41,7 +43,8 @@ for (int i = 1; i <= s.size(); i++) {
 cout << dpp[s.size()][t.size()] << "\n";
 // number of distinct LCS sequences
 int MOD = 1e9 + 7;
-vector<vector<int>> cnt(s.size() + 1, vector<int>(t.size() + 1, 1));
+vector<vector<int>> cnt(s.size() + 1,
+                        vector<int>(t.size() + 1, 1));
 for (int i = 1; i <= s.size(); i++) {
   for (int j = 1; j <= t.size(); j++) {
     if (s[i - 1] == t[j - 1])
@@ -52,7 +55,8 @@ for (int i = 1; i <= s.size(); i++) {
       cnt[i][j] = cnt[i][j - 1];
     else {
       cnt[i][j] = cnt[i - 1][j] + cnt[i][j - 1];
-      if (dp[i][j] == dp[i - 1][j - 1]) cnt[i][j] -= cnt[i - 1][j - 1];
+      if (dp[i][j] == dp[i - 1][j - 1])
+        cnt[i][j] -= cnt[i - 1][j - 1];
       cnt[i][j] = (cnt[i][j] + MOD) % MOD;
     }
   }

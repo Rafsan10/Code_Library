@@ -1,6 +1,7 @@
 void Dijkstra(int start) {
   // vector<pair<int, int>> adj[N];
-  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+  priority_queue<pair<int, int>, vector<pair<int, int>>,
+                 greater<pair<int, int>>> pq;
   pq.push({0, start});
   while (!pq.empty()) {
     auto it = pq.top();

@@ -1,5 +1,7 @@
 bool delim(char c) { return c == ' '; }
-bool is_op(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
+bool is_op(char c) {
+  return c == '+' || c == '-' || c == '*' || c == '/';
+}
 bool is_unary(char c) { return c == '+' || c == '-'; }
 int priority(char op) {
   if (op < 0)  // unary operator
@@ -59,10 +61,13 @@ int evaluate(string& s) {
       may_be_unary = false;
     } else if (is_op(s[i])) {
       char cur_op = s[i];
-      if (may_be_unary && is_unary(cur_op)) cur_op = -cur_op;
+      if (may_be_unary && is_unary(cur_op))
+        cur_op = -cur_op;
       while (!op.empty() &&
-             ((cur_op >= 0 && priority(op.top()) >= priority(cur_op)) ||
-              (cur_op < 0 && priority(op.top()) > priority(cur_op)))) {
+        ((cur_op >= 0 &&
+          priority(op.top()) >= priority(cur_op)) ||
+         (cur_op < 0 &&
+          priority(op.top()) > priority(cur_op)))) {
         process_op(st, op.top());
         op.pop();
       }

@@ -1,10 +1,14 @@
-array<vector<int>, 2> get_sa(string& s, int lim=128) {  // for integer, just change string to vector<int> and minimum value of vector must be >= 1
+// for integers: change string to vector<int>, and min
+// value of the vector must be >= 1
+array<vector<int>, 2> get_sa(string& s, int lim=128) {
   int n = s.size() + 1, k = 0, a, b;
-  vector<int> x(begin(s), end(s)+1), y(n), sa(n), lcp(n), ws(max(n, lim)), rank(n);
+  vector<int> x(begin(s), end(s)+1);
+  vector<int> y(n), sa(n), lcp(n);
+  vector<int> ws(max(n, lim)), rank(n);
   x.back() = 0;
   iota(begin(sa), end(sa), 0);
-  for (int j = 0, p = 0; p < n; j = max(1, j * 2), lim = p)
-  {
+  for (int j = 0, p = 0; p < n;
+       j = max(1, j * 2), lim = p) {
     p = j, iota(begin(y), end(y), n - j);
     for (int i = 0; i < n; ++i){
       if (sa[i] >= j) y[p++] = sa[i] - j;
@@ -16,12 +20,14 @@ array<vector<int>, 2> get_sa(string& s, int lim=128) {  // for integer, just cha
     swap(x, y), p = 1, x[sa[0]] = 0;
     for (int i = 1; i < n; ++i){
       a = sa[i - 1], b = sa[i], x[b] =
-        (y[a] == y[b] && y[a + j] == y[b + j]) ? p - 1 : p++;
+        (y[a] == y[b] && y[a + j] == y[b + j])
+        ? p - 1 : p++;
     }
   }
   for (int i = 1; i < n; ++i) rank[sa[i]] = i;
   for (int i = 0, j; i < n - 1; lcp[rank[i++]] = k){
-    for (k && k--, j = sa[rank[i] - 1]; s[i + k] == s[j + k]; k++);
+    for (k && k--, j = sa[rank[i] - 1];
+         s[i + k] == s[j + k]; k++);
   }
   sa.erase(sa.begin()), lcp.erase(lcp.begin());
   return {sa, lcp};
@@ -58,7 +64,8 @@ for (int i = 0; i < n; ++i) {
   pref[i + 1] = pref[i] + (n - sa[i] - lcp[i]);
 }
 auto kth = [&] (ll k) {
-  int i = lower_bound(pref.begin(), pref.end(), k) - pref.begin();
+  int i = lower_bound(pref.begin(), pref.end(), k)
+          - pref.begin();
   i--;
   k -= pref[i];
   return array<int, 2>{sa[i], k + lcp[i]};
@@ -100,35 +107,36 @@ for (int len = 1; len <= n / 2; ++len) {
   for (int i = 0; i + len < n; i += len) {
     int er = st.get_lcp(i, i + len);
     int el = 0;
-    if (i) el = rev_st.get_lcp(n - i, n - i - len); // rev lcp of (i - 1, i + len - 1)
+    // rev lcp of (i - 1, i + len - 1)
+    if (i) el = rev_st.get_lcp(n - i, n - i - len);
     k = max(k, 1 + (er + el) / len);
   }
 }
 ## Sparse Table for LCP Array
 struct Sparse {
-    int n;
-    vector<array<int, K>> st;
-    vector<int> pos;
-    Sparse (vector<int> sa, vector<int> &lcp) {
-        n = sa.size();
-        pos.resize(n);
-        for (int i = 0; i < n; ++i) {
-            pos[sa[i]] = i;
-        }
-        st.resize(n);
-        for(int i = 0; i < n; ++i) st[i][0]=lcp[i];
-        for(int k = 0; k + 1 < K; ++k)
-          for(int i = 0; i + (2 << k) <= n; ++i)
-            st[i][k + 1] = min(st[i][k], st[i + (1 << k)][k]);
+  int n;
+  vector<array<int, K>> st;
+  vector<int> pos;
+  Sparse (vector<int> sa, vector<int> &lcp) {
+    n = sa.size();
+    pos.resize(n);
+    for (int i = 0; i < n; ++i) {
+      pos[sa[i]] = i;
     }
-
-    int get_lcp(int l, int r) {
-      l = pos[l];
-      r = pos[r];
-      if (l > r) swap(l, r);
-      assert(l < r);
-      l++;
-      int k = lg[r - l + 1];
-      return min(st[l][k], st[r - (1 << k) + 1][k]);
-    }
+    st.resize(n);
+    for(int i = 0; i < n; ++i) st[i][0]=lcp[i];
+    for(int k = 0; k + 1 < K; ++k)
+      for(int i = 0; i + (2 << k) <= n; ++i)
+        st[i][k + 1] =
+            min(st[i][k], st[i + (1 << k)][k]);
+  }
+  int get_lcp(int l, int r) {
+    l = pos[l];
+    r = pos[r];
+    if (l > r) swap(l, r);
+    assert(l < r);
+    l++;
+    int k = lg[r - l + 1];
+    return min(st[l][k], st[r - (1 << k) + 1][k]);
+  }
 };

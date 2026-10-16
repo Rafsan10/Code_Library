@@ -9,7 +9,8 @@ struct DSU {
     maxElmt.resize(n + 1);
     cntElmt.resize(n + 1, 1);
     cc = n;
-    for (int i = 1; i <= n; i++) par[i] = minElmt[i] = maxElmt[i] = i;
+    for (int i = 1; i <= n; i++)
+      par[i] = minElmt[i] = maxElmt[i] = i;
   }
   int find(int u) {
     if (u == par[u]) return u;
@@ -27,7 +28,8 @@ struct DSU {
     minElmt[pU] = min(minElmt[pU], minElmt[pV]);
     maxElmt[pU] = max(maxElmt[pU], maxElmt[pV]);
   }
-  int getMinElementIntheSet(int u) { return minElmt[find(u)]; }
-  int getMaxElementIntheSet(int u) { return maxElmt[find(u)]; }
-  int getNumofElementIntheSet(int u) { return cntElmt[find(u)]; }
+  // min / max / count of elements in u's set
+  int getMin(int u) { return minElmt[find(u)]; }
+  int getMax(int u) { return maxElmt[find(u)]; }
+  int getCnt(int u) { return cntElmt[find(u)]; }
 };

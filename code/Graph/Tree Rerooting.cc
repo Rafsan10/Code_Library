@@ -1,30 +1,33 @@
+// ei = edge index (position of neighbour in g[u])
+// merge    : Agg * Value * Vertex(int) * ei -> Agg
+// base     : Vertex(int) -> Agg
+// finalize : Agg * Vertex(int) * ei -> Value
 namespace reroot {
-const auto exclusive = [](const auto& a, const auto& base,
-                          const auto& merge_into, int vertex) {
+const auto exclusive = [](const auto& a,
+    const auto& base, const auto& merge, int vertex) {
   int n = (int)a.size();
-  using Aggregate = std::decay_t<decltype(base)>;
-  std::vector<Aggregate> b(n, base);
-  for (int bit = (int)std::__lg(n); bit >= 0; --bit) {
+  using Agg = decay_t<decltype(base)>;
+  vector<Agg> b(n, base);
+  for (int bit = (int)__lg(n); bit >= 0; --bit) {
     for (int i = n - 1; i >= 0; --i) b[i] = b[i >> 1];
     int sz = n - (n & !bit);
     for (int i = 0; i < sz; ++i) {
       int index = (i >> bit) ^ 1;
-      b[index] = merge_into(b[index], a[i], vertex, i);
+      b[index] = merge(b[index], a[i], vertex, i);
     }
   }
   return b;
 };
-// MergeInto : Aggregate * Value * Vertex(int) * EdgeIndex(int) -> Aggregate
-// Base : Vertex(int) -> Aggregate
-// FinalizeMerge : Aggregate * Vertex(int) * EdgeIndex(int) -> Value
-const auto rerooter = [](const auto& g, const auto& base,
-                         const auto& merge_into, const auto& finalize_merge) {
+const auto rerooter = [](const auto& g,
+    const auto& base, const auto& merge,
+    const auto& finalize) {
   int n = (int)g.size();
-  using Aggregate = std::decay_t<decltype(base(0))>;
-  using Value = std::decay_t<decltype(finalize_merge(base(0), 0, 0))>;
-  std::vector<Value> root_dp(n), dp(n);
-  std::vector<std::vector<Value>> edge_dp(n), redge_dp(n);
-  std::vector<int> bfs, parent(n);
+  using Agg = decay_t<decltype(base(0))>;
+  using Value =
+      decay_t<decltype(finalize(base(0), 0, 0))>;
+  vector<Value> root_dp(n), dp(n);
+  vector<vector<Value>> edge_dp(n), redge_dp(n);
+  vector<int> bfs, parent(n);
   bfs.reserve(n);
   bfs.push_back(0);
   for (int i = 0; i < n; ++i) {
@@ -37,61 +40,55 @@ const auto rerooter = [](const auto& g, const auto& base,
   }
   for (int i = n - 1; i >= 0; --i) {
     int u = bfs[i];
-    int p_edge_index = -1;
-    Aggregate aggregate = base(u);
-    for (int edge_index = 0; edge_index < (int)g[u].size(); ++edge_index) {
-      int v = g[u][edge_index];
+    int par_ei = -1;
+    Agg agg = base(u);
+    for (int ei = 0; ei < (int)g[u].size(); ++ei) {
+      int v = g[u][ei];
       if (parent[u] == v) {
-        p_edge_index = edge_index;
+        par_ei = ei;
         continue;
       }
-      aggregate = merge_into(aggregate, dp[v], u, edge_index);
+      agg = merge(agg, dp[v], u, ei);
     }
-    dp[u] = finalize_merge(aggregate, u, p_edge_index);
+    dp[u] = finalize(agg, u, par_ei);
   }
-
   for (auto u : bfs) {
     dp[parent[u]] = dp[u];
     edge_dp[u].reserve(g[u].size());
     for (auto v : g[u]) edge_dp[u].push_back(dp[v]);
-    auto dp_exclusive = exclusive(edge_dp[u], base(u), merge_into, u);
+    auto dp_excl =
+        exclusive(edge_dp[u], base(u), merge, u);
     redge_dp[u].reserve(g[u].size());
-    for (int i = 0; i < (int)dp_exclusive.size(); ++i) {
-      auto merge_value = finalize_merge(dp_exclusive[i], u, i);
+    for (int i = 0; i < (int)dp_excl.size(); ++i) {
+      auto merge_value = finalize(dp_excl[i], u, i);
       redge_dp[u].push_back(merge_value);
     }
-    root_dp[u] = finalize_merge(
-        n > 1 ? merge_into(dp_exclusive[0], edge_dp[u][0], u, 0) : base(u), u,
-        -1);
+    root_dp[u] = finalize(n > 1 ? merge(dp_excl[0],
+        edge_dp[u][0], u, 0) : base(u), u, -1);
     for (int i = 0; i < (int)g[u].size(); ++i) {
       dp[g[u][i]] = redge_dp[u][i];
     }
   }
-
-  return std::make_tuple(std::move(root_dp), std::move(edge_dp),
-                         std::move(redge_dp));
+  return make_tuple(move(root_dp), move(edge_dp),
+                    move(redge_dp));
 };
 }  // namespace reroot
-
 void solve() {
-  using Aggregate = int;
+  using Agg = int;
   using Value = int;
-
-  auto base = [](int vertex) -> Aggregate { return 0; };
-  auto merge_into = [](Aggregate vertex_dp, Value neighbor_dp, int vertex,
-                       int edge_index) -> Aggregate {
-    return vertex_dp + std::max(neighbor_dp, 0);
+  auto base = [](int vertex) -> Agg { return 0; };
+  auto merge = [](Agg vertex_dp, Value neighbor_dp,
+                  int vertex, int ei) -> Agg {
+    return vertex_dp + max(neighbor_dp, 0);
   };
-  auto finalize_merge = [&](Aggregate vertex_dp, int vertex,
-                            int edge_index) -> Value {
+  auto finalize = [&](Agg vertex_dp, int vertex,
+                      int ei) -> Value {
     return vertex_dp + 2 * color[vertex] - 1;
   };
-
   auto [reroot_result, edge_dp, redge_dp] =
-      reroot::rerooter(g, base, merge_into, finalize_merge);
-
+      reroot::rerooter(g, base, merge, finalize);
   for (auto dp : reroot_result) {
-    std::cout << dp << ' ';
+    cout << dp << ' ';
   }
-  std::cout << '\n';
+  cout << '\n';
 }

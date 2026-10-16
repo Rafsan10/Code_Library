@@ -3,14 +3,15 @@ int gauss(vector<vector<ld>>& a, vector<ld>& ans) {
   const ld EPS = 1e-9;
   int n = a.size();///number of equations
   int m = a[0].size() - 1;///number of variables
-  vector<int>where(m, -1);///indicates which row contains the solution
+  // where[col]: which row contains the solution
+  vector<int>where(m, -1);
   int row, col;
   for (col = 0, row = 0;col < m && row < n;++col) {
-    int sel = row;///which row contains the maximum value/
+    int sel = row; // row containing the maximum value
     for (int i = row + 1;i < n;i++)
       if (abs(a[i][col]) > abs(a[sel][col]))
         sel = i;
-    if (abs(a[sel][col]) < EPS) continue;///it's basically 0.
+    if (abs(a[sel][col]) < EPS) continue; // ~0
     a[sel].swap(a[row]);///taking the max row up
     where[col] = row;
     ld t = a[row][col];

@@ -20,14 +20,20 @@ struct point {
     this->x = x;
     this->y = y;
   }
-  point operator+(point p) { return point(x + p.x, y + p.y); }
-  point operator-(point p) { return point(x - p.x, y - p.y); }
+  point operator+(point p) {
+    return point(x + p.x, y + p.y);
+  }
+  point operator-(point p) {
+    return point(x - p.x, y - p.y);
+  }
   Tf len() { return sqrt(x * x + y * y); }
   T norm() { return x * x + y * y; }
   point operator*(T a) { return point(x * a, y * a); }
   point operator/(T a) { return point(x / a, y / a); }
   // integer
-  bool operator==(point p) { return p.x == x && p.y == y; }
+  bool operator==(point p) {
+    return p.x == x && p.y == y;
+  }
   // float
   // bool operator==(point p) {
   //     return sgn(p.x - x) == 0 && sgn(p.y - y) == 0;
@@ -38,14 +44,22 @@ struct point {
   }
   // float
   // bool operator<(point p) {
-  //     if (sgn(p.x - x) == 0) return sgn(y - p.y) == -1;
+  //  if (sgn(p.x - x) == 0) return sgn(y - p.y) == -1;
   //     return sgn(x - p.x) == -1;
   // }
 };
-T dot(point a, point b) { return a.x * b.x + a.y * b.y; }
-T cross(point a, point b) { return a.x * b.y - b.x * a.y; }
-T orien(point a, point b, point c) { return cross(a - b, a - c); }
-Tf area(point a, point b, point c) { return abs(orien(a, b, c)) / (Tf)2; }
+T dot(point a, point b) {
+  return a.x * b.x + a.y * b.y;
+}
+T cross(point a, point b) {
+  return a.x * b.y - b.x * a.y;
+}
+T orien(point a, point b, point c) {
+  return cross(a - b, a - c);
+}
+Tf area(point a, point b, point c) {
+  return abs(orien(a, b, c)) / (Tf)2;
+}
 struct segment {
   point a, b;
   bool onSegment(point p) {
