@@ -18,7 +18,8 @@ bool bellmanFord(int n, int src, vector<Edge>& e,
   return true;
 }
 // SPFA: usually fast, worst O(V * E). adj[u] = {v, w}
-bool spfa(int n, int src, vector<vector<pair<int, ll>>>& adj,
+bool spfa(int n, int src,
+          vector<vector<pair<int, ll>>>& adj,
           vector<ll>& d) {
   d.assign(n + 1, INF);
   vector<int> len(n + 1, 0); // edges on current path

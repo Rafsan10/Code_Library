@@ -1,9 +1,9 @@
-// SOS DP, O(MLOG * 2^MLOG). Set dp[mask] = f(mask), then
+// SOS DP, O(MLOG * 2^MLOG). Set dp[mask] = f(mask):
 // forward1: dp[mask] = sum of f(sub) over submasks sub
 // backward1: inverse of forward1 (Mobius transform)
 // forward2 / backward2: same for supermasks
 // All submasks of mask, O(3^n) total over all masks:
-// for (int s = mask; s; s = (s - 1) & mask) {...} (+ s=0)
+// for (int s = mask; s; s = (s-1) & mask) {} (+ s=0)
 const int MAXN = 1 << 20, MLOG = 20;
 ll dp[MAXN];
 // Sum over subsets (SOS Down)

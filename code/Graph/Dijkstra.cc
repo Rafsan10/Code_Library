@@ -1,6 +1,7 @@
-// adj[u] = {v, w}, w >= 0. Returns dist (INF: unreachable)
+// adj[u] = {v, w}, w >= 0. dist = INF if unreachable
 const ll INF = 1e18;
-vector<ll> dijkstra(int src, vector<vector<pair<int, ll>>>& adj) {
+vector<ll> dijkstra(int src,
+                   vector<vector<pair<int, ll>>>& adj) {
   int n = adj.size();
   vector<ll> d(n, INF);
   priority_queue<pair<ll, int>, vector<pair<ll, int>>,

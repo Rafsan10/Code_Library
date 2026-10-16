@@ -1,10 +1,11 @@
 // Polynomial multiplication O(n log n)
-// NTT: exact mod 998244353 (root 3). Any mod: use FFT +
-// split into 15-bit halves, or CRT of 3 NTT primes.
+// NTT: exact mod 998244353 (root 3). Any mod: FFT with
+// 15-bit split, or CRT of 3 NTT primes.
 const int MODN = 998244353, ROOT = 3;
 ll pw(ll b, ll e) {
   ll r = 1; b %= MODN;
-  for (; e; e >>= 1, b = b * b % MODN) if (e & 1) r = r * b % MODN;
+  for (; e; e >>= 1, b = b * b % MODN)
+    if (e & 1) r = r * b % MODN;
   return r;
 }
 void ntt(vector<ll>& a, bool inv) {
@@ -20,10 +21,12 @@ void ntt(vector<ll>& a, bool inv) {
     if (inv) w = pw(w, MODN - 2);
     for (int i = 0; i < n; i += len) {
       ll wn = 1;
-      for (int j = 0; j < len / 2; j++, wn = wn * w % MODN) {
-        ll u = a[i + j], v = a[i + j + len / 2] * wn % MODN;
+      for (int j = 0; j < len / 2; j++) {
+        ll u = a[i + j];
+        ll v = a[i + j + len / 2] * wn % MODN;
         a[i + j] = (u + v) % MODN;
         a[i + j + len / 2] = (u - v + MODN) % MODN;
+        wn = wn * w % MODN;
       }
     }
   }
@@ -65,16 +68,18 @@ void fft(vector<cd>& a, bool inv) {
   }
   if (inv) for (cd& x : a) x /= n;
 }
-vector<ll> multiplyFFT(const vector<ll>& a, const vector<ll>& b) {
+vector<ll> multiplyFFT(vector<ll>& a, vector<ll>& b) {
   if (a.empty() || b.empty()) return {};
   int need = a.size() + b.size() - 1, n = 1;
   while (n < need) n <<= 1;
-  vector<cd> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+  vector<cd> fa(a.begin(), a.end());
+  vector<cd> fb(b.begin(), b.end());
   fa.resize(n); fb.resize(n);
   fft(fa, false); fft(fb, false);
   for (int i = 0; i < n; i++) fa[i] *= fb[i];
   fft(fa, true);
   vector<ll> res(need);
-  for (int i = 0; i < need; i++) res[i] = llround(fa[i].real());
+  for (int i = 0; i < need; i++)
+    res[i] = llround(fa[i].real());
   return res;
 }

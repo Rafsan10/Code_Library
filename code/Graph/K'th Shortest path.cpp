@@ -1,5 +1,5 @@
-// d[v] = K smallest walk lengths src -> v (sorted, walks
-// may repeat vertices). Each node popped <= K times.
+// d[v] = K smallest walk lengths src -> v (sorted;
+// walks may repeat vertices). Node popped <= K times.
 // O(K * (V + E) log). adj[u] = {v, w}, w >= 0
 vector<vector<ll>> kShortest(int src, int K,
     vector<vector<pair<int, ll>>>& adj) {

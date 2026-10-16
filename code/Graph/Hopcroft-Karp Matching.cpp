@@ -7,7 +7,8 @@ struct HopcroftKarp {
   vector<vector<int>> adj;
   vector<int> mL, mR, dist;
   HopcroftKarp(int n, int m)
-      : n(n), m(m), adj(n), mL(n, -1), mR(m, -1), dist(n) {}
+      : n(n), m(m), adj(n), mL(n, -1), mR(m, -1),
+        dist(n) {}
   void addEdge(int u, int v) { adj[u].push_back(v); }
   bool bfs() {
     queue<int> q; bool found = false;
@@ -20,7 +21,8 @@ struct HopcroftKarp {
       for (int v : adj[u]) {
         int w = mR[v];
         if (w == -1) found = true;
-        else if (dist[w] == -1) dist[w] = dist[u] + 1, q.push(w);
+        else if (dist[w] == -1)
+          dist[w] = dist[u] + 1, q.push(w);
       }
     }
     return found;
@@ -28,7 +30,8 @@ struct HopcroftKarp {
   bool dfs(int u) {
     for (int v : adj[u]) {
       int w = mR[v];
-      if (w == -1 || (dist[w] == dist[u] + 1 && dfs(w))) {
+      if (w == -1 ||
+          (dist[w] == dist[u] + 1 && dfs(w))) {
         mL[u] = v; mR[v] = u;
         return true;
       }

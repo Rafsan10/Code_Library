@@ -1,6 +1,6 @@
 // O(V^2 E), unit capacity / bipartite: O(E sqrt V)
 // Min cut: after maxflow, S side = level[v] != -1
-// Bipartite matching: src->L (1), L->R (1), R->sink (1)
+// Bipartite matching: s->L, L->R, R->t, all cap 1
 struct Dinic {
   struct E { int to; ll cap; };
   vector<E> e; vector<vector<int>> g;
@@ -9,7 +9,7 @@ struct Dinic {
   int addEdge(int u, int v, ll cap, ll rcap = 0) {
     g[u].push_back(e.size()); e.push_back({v, cap});
     g[v].push_back(e.size()); e.push_back({u, rcap});
-    return e.size() - 2; // id; flow on it = e[id ^ 1].cap
+    return e.size() - 2; // flow on id = e[id ^ 1].cap
   }
   bool bfs(int s, int t) {
     fill(level.begin(), level.end(), -1);

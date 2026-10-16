@@ -1,5 +1,5 @@
 // Subtree of u = flat[tin[u] .. tout[u]] (contiguous)
-// -> subtree queries become range queries (BIT / segtree)
+// -> subtree query = range query (BIT / segtree)
 const int N = 2e5 + 5;
 vector<int> g[N];
 int tin[N], tout[N], flat[N], timer_ = 0;

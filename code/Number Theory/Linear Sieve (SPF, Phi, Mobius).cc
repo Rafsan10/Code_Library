@@ -1,5 +1,5 @@
-// O(N): primes, smallest prime factor, Euler phi, Mobius
-// factorize x < N in O(log x): while (x > 1) p = spf[x]...
+// O(N): primes, smallest prime factor, phi, Mobius
+// factorize x < N in O(log x) by repeatedly x /= spf[x]
 const int N = 1e6 + 5;
 int spf[N], phi[N], mu[N];
 vector<int> primes;
@@ -16,7 +16,8 @@ void linearSieve() {
       if (p == spf[i]) { // p^2 divides i * p
         phi[i * p] = phi[i] * p; mu[i * p] = 0;
       } else {
-        phi[i * p] = phi[i] * (p - 1); mu[i * p] = -mu[i];
+        phi[i * p] = phi[i] * (p - 1);
+        mu[i * p] = -mu[i];
       }
     }
   }

@@ -1,7 +1,9 @@
 // isPrime: deterministic for all n < 2^64
 // factor(n): prime factors (unsorted, with repeats)
 using u64 = uint64_t; using u128 = __uint128_t;
-u64 mulmod(u64 a, u64 b, u64 m) { return (u128)a * b % m; }
+u64 mulmod(u64 a, u64 b, u64 m) {
+  return (u128)a * b % m;
+}
 u64 powmod(u64 b, u64 e, u64 m) {
   u64 r = 1; b %= m;
   for (; e; e >>= 1, b = mulmod(b, b, m))
@@ -10,7 +12,8 @@ u64 powmod(u64 b, u64 e, u64 m) {
 }
 bool isPrime(u64 n) {
   if (n < 2) return false;
-  for (u64 p : {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37})
+  for (u64 p : {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31,
+                37})
     if (n % p == 0) return n == p;
   u64 d = n - 1; int s = __builtin_ctzll(d); d >>= s;
   for (u64 a : {2, 325, 9375, 28178, 450775, 9780504,
@@ -28,12 +31,15 @@ bool isPrime(u64 n) {
 }
 mt19937_64 rng64(chrono::steady_clock::now()
                      .time_since_epoch().count());
-u64 pollard(u64 n) { // a non-trivial factor of composite n
+// a non-trivial factor of composite n
+u64 pollard(u64 n) {
   if (n % 2 == 0) return 2;
   while (true) {
     u64 x = rng64() % (n - 2) + 2, y = x;
     u64 c = rng64() % (n - 1) + 1, d = 1;
-    auto f = [&](u64 v) { return (mulmod(v, v, n) + c) % n; };
+    auto f = [&](u64 v) {
+      return (mulmod(v, v, n) + c) % n;
+    };
     while (d == 1) {
       x = f(x); y = f(f(y));
       d = __gcd(x > y ? x - y : y - x, n);

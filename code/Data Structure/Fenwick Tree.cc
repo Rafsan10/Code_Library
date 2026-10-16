@@ -10,17 +10,20 @@ struct BIT {
     for (; i > 0; i -= i & -i) s += t[i];
     return s;
   }
-  ll query(int l, int r) { return query(r) - query(l - 1); }
+  ll query(int l, int r) {
+    return query(r) - query(l - 1);
+  }
   // smallest i with prefix sum >= k (all values >= 0)
   int lower_bound(ll k) {
     int pos = 0;
     for (int pw = __lg(n); pw >= 0; pw--)
-      if (pos + (1 << pw) <= n && t[pos + (1 << pw)] < k)
+      if (pos + (1 << pw) <= n &&
+          t[pos + (1 << pw)] < k)
         pos += 1 << pw, k -= t[pos];
     return pos + 1;
   }
 };
-// Range add + point query: update(l, v), update(r+1, -v)
+// Range add, point query: update(l,v), update(r+1,-v)
 struct Fenwick2D {
   int n, m;
   vector<vector<ll>> t;

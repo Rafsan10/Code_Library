@@ -1,4 +1,4 @@
-// Split C[1..L] into G non-empty groups, minimize sum cost
+// Split C[1..L] into G non-empty groups, min total cost
 // dp[g][i] = min_{j<=i} dp[g-1][j-1] + cost(j, i)
 // Valid when opt(g, i) <= opt(g, i+1). O(G * L log L)
 const ll INF = 1e18;

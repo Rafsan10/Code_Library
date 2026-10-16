@@ -8,7 +8,7 @@ ll PIE(vector<ll>& div, ll num) {
     for (int i = 0; i < n && lcm <= num; ++i)
       if (msk >> i & 1) {
         ll g = __gcd(lcm, div[i]);
-        if (lcm / g > num / div[i]) lcm = num + 1; // > num
+        if (lcm / g > num / div[i]) lcm = num + 1;
         else lcm = lcm / g * div[i];
       }
     ll cur = num / lcm;

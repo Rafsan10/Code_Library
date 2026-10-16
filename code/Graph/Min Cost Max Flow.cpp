@@ -1,4 +1,4 @@
-// Successive shortest paths with SPFA (negative costs ok,
+// Successive shortest paths + SPFA (negative costs ok,
 // no negative cycles). Returns {max flow, min cost}.
 // Flow limit K: pass maxf = K. Max cost: negate costs.
 struct MCMF {
@@ -7,8 +7,10 @@ struct MCMF {
   vector<ll> dist; vector<int> pe; vector<bool> inq;
   MCMF(int n) : n(n), g(n), dist(n), pe(n), inq(n) {}
   void addEdge(int u, int v, ll cap, ll cost) {
-    g[u].push_back(e.size()); e.push_back({v, cap, cost});
-    g[v].push_back(e.size()); e.push_back({u, 0, -cost});
+    g[u].push_back(e.size());
+    e.push_back({v, cap, cost});
+    g[v].push_back(e.size());
+    e.push_back({u, 0, -cost});
   }
   bool spfa(int s, int t) {
     fill(dist.begin(), dist.end(), LLONG_MAX);

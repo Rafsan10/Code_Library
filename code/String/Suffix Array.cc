@@ -36,7 +36,7 @@ array<vector<int>, 2> get_sa(string& s, int lim=128) {
 auto compare = [&] (int l1, int r1, int l2, int r2) {
   int len1 = r1 - l1 + 1, len2 = r2 - l2 + 1;
   int len = min(len1, len2);
-  // st = Sparse(sa, lcp) below; get_lcp takes positions
+  // st = Sparse(sa, lcp) below; takes positions
   int x = (l1 != l2) ? st.get_lcp(l1, l2) : len;
   if (x >= len) {
     if (len1 == len2) return 0;

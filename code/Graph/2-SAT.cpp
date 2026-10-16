@@ -12,29 +12,36 @@ struct TwoSat {
     g[a ^ 1].push_back(b); g[b ^ 1].push_back(a);
   }
   void setVal(int x, bool v) { either(x, v, x, v); }
-  void implies(int x, bool vx, int y, bool vy) { // x -> y
+  // (x == vx) -> (y == vy)
+  void implies(int x, bool vx, int y, bool vy) {
     either(x, !vx, y, vy);
   }
   void dfs(int u) {
     low[u] = tin[u] = ++timer; stk.push_back(u);
     for (int v : g[u]) {
-      if (!tin[v]) dfs(v), low[u] = min(low[u], low[v]);
-      else if (comp[v] == -1) low[u] = min(low[u], tin[v]);
+      if (!tin[v]) {
+        dfs(v); low[u] = min(low[u], low[v]);
+      } else if (comp[v] == -1) {
+        low[u] = min(low[u], tin[v]);
+      }
     }
     if (low[u] == tin[u]) {
       int v;
-      do { v = stk.back(); stk.pop_back(); comp[v] = nc; }
-      while (v != u);
+      do {
+        v = stk.back(); stk.pop_back(); comp[v] = nc;
+      } while (v != u);
       nc++;
     }
   }
   bool solve() { // val[x] = assignment if satisfiable
     comp.assign(2 * n, -1); low.assign(2 * n, 0);
     tin.assign(2 * n, 0); val.assign(n, false);
-    for (int i = 0; i < 2 * n; i++) if (!tin[i]) dfs(i);
+    for (int i = 0; i < 2 * n; i++)
+      if (!tin[i]) dfs(i);
     for (int x = 0; x < n; x++) {
       if (comp[2 * x] == comp[2 * x + 1]) return false;
-      val[x] = comp[2 * x] < comp[2 * x + 1]; // Tarjan order
+      // Tarjan: SCC ids are in reverse topo order
+      val[x] = comp[2 * x] < comp[2 * x + 1];
     }
     return true;
   }

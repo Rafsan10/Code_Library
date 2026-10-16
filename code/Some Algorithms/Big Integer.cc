@@ -87,7 +87,8 @@ struct BigInteger {
       q += char('0' + r / d); r %= d;
     }
     size_t k = q.find_first_not_of('0');
-    return BigInteger(k == string::npos ? "0" : q.substr(k));
+    return BigInteger(k == string::npos ? "0"
+                                        : q.substr(k));
   }
   // Overload << operator to output
   // BigInteger object

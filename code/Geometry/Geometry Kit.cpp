@@ -1,24 +1,31 @@
-// T = ll for exact integer geometry, ld for real. CCW = +
+// T = ll for exact integer geometry, ld for real
 typedef long double ld;
 const ld EPS = 1e-9, PI = acosl(-1);
 template <class T> struct P {
   T x, y;
   P(T x = 0, T y = 0) : x(x), y(y) {}
-  P operator+(P o) const { return P(x + o.x, y + o.y); }
-  P operator-(P o) const { return P(x - o.x, y - o.y); }
+  P operator+(P o) const { return P(x + o.x, y + o.y);}
+  P operator-(P o) const { return P(x - o.x, y - o.y);}
   P operator*(T k) const { return P(x * k, y * k); }
   P operator/(T k) const { return P(x / k, y / k); }
-  bool operator<(P o) const { return tie(x, y) < tie(o.x, o.y); }
-  bool operator==(P o) const { return x == o.x && y == o.y; }
+  bool operator<(P o) const {
+    return x < o.x || (x == o.x && y < o.y);
+  }
+  bool operator==(P o) const {
+    return x == o.x && y == o.y;
+  }
   T dot(P o) const { return x * o.x + y * o.y; }
   T cross(P o) const { return x * o.y - y * o.x; }
-  T cross(P a, P b) const { return (a - *this).cross(b - *this); }
+  T cross(P a, P b) const { // (a - this) x (b - this)
+    return (a - *this).cross(b - *this);
+  }
   T norm2() const { return x * x + y * y; }
   ld len() const { return sqrtl((ld)norm2()); }
   ld ang() const { return atan2l((ld)y, (ld)x); }
   P perp() const { return P(-y, x); } // rotate +90
   P rot(ld a) const { // real T only
-    return P(x * cosl(a) - y * sinl(a), x * sinl(a) + y * cosl(a));
+    return P(x * cosl(a) - y * sinl(a),
+             x * sinl(a) + y * cosl(a));
   }
 };
 using pt = P<ll>; using ptd = P<ld>;
@@ -29,13 +36,14 @@ template <class T> int orient(P<T> a, P<T> b, P<T> c) {
   return sgn(a.cross(b, c));
 }
 template <class T> bool onSeg(P<T> p, P<T> a, P<T> b) {
-  return orient(a, b, p) == 0 && sgn((a - p).dot(b - p)) <= 0;
+  return orient(a, b, p) == 0 &&
+         sgn((a - p).dot(b - p)) <= 0;
 }
 // segments ab and cd intersect (touching counts)
 template <class T>
 bool segInter(P<T> a, P<T> b, P<T> c, P<T> d) {
-  if (onSeg(c, a, b) || onSeg(d, a, b) || onSeg(a, c, d) ||
-      onSeg(b, c, d)) return true;
+  if (onSeg(c, a, b) || onSeg(d, a, b) ||
+      onSeg(a, c, d) || onSeg(b, c, d)) return true;
   return orient(a, b, c) * orient(a, b, d) < 0 &&
          orient(c, d, a) * orient(c, d, b) < 0;
 }
@@ -50,7 +58,8 @@ ld distLine(ptd p, ptd a, ptd b) { // line ab
 ld distSeg(ptd p, ptd a, ptd b) { // segment ab
   if (a == b) return (p - a).len();
   ptd d = b - a;
-  ld t = max((ld)0, min((ld)1, (p - a).dot(d) / d.norm2()));
+  ld t = (p - a).dot(d) / d.norm2();
+  t = max((ld)0, min((ld)1, t));
   return (p - (a + d * t)).len();
 }
 ptd project(ptd p, ptd a, ptd b) { // foot on line ab
@@ -69,18 +78,20 @@ template <class T> T area2(const vector<P<T>>& p) {
 ll boundaryPts(pt a, pt b) {
   return __gcd(llabs(a.x - b.x), llabs(a.y - b.y)) + 1;
 }
-// 1 inside, 0 on boundary, -1 outside. O(n), any polygon
-template <class T> int inPoly(const vector<P<T>>& p, P<T> q) {
+// 1 inside, 0 on boundary, -1 outside. O(n), any simple
+template <class T>
+int inPoly(const vector<P<T>>& p, P<T> q) {
   int n = p.size(); bool in = false;
   for (int i = 0; i < n; i++) {
     P<T> a = p[i], b = p[(i + 1) % n];
     if (onSeg(q, a, b)) return 0;
     if ((a.y > q.y) != (b.y > q.y) &&
-        (b.y > a.y) == (sgn(a.cross(b, q)) > 0)) in = !in;
+        (b.y > a.y) == (sgn(a.cross(b, q)) > 0))
+      in = !in;
   }
   return in ? 1 : -1;
 }
-// Convex hull, monotone chain, CCW, no collinear points
+// Convex hull, monotone chain, CCW, no collinear pts
 // (change <= 0 to < 0 to keep collinear; not if all
 // points are collinear)
 template <class T> vector<P<T>> hull(vector<P<T>> p) {
@@ -89,20 +100,25 @@ template <class T> vector<P<T>> hull(vector<P<T>> p) {
   int n = p.size(), k = 0;
   if (n < 3) return p;
   vector<P<T>> h(2 * n);
+  auto bad = [&](int i) { // not a strict left turn
+    return sgn(h[k - 2].cross(h[k - 1], p[i])) <= 0;
+  };
   for (int i = 0; i < n; h[k++] = p[i++])
-    while (k >= 2 && sgn(h[k - 2].cross(h[k - 1], p[i])) <= 0) k--;
-  for (int i = n - 2, t = k + 1; i >= 0; h[k++] = p[i--])
-    while (k >= t && sgn(h[k - 2].cross(h[k - 1], p[i])) <= 0) k--;
+    while (k >= 2 && bad(i)) k--;
+  for (int i = n-2, t = k+1; i >= 0; h[k++] = p[i--])
+    while (k >= t && bad(i)) k--;
   h.resize(k - 1);
   return h;
 }
-// q inside or on convex polygon h (CCW, from hull()) O(log n)
-template <class T> bool inConvex(const vector<P<T>>& h, P<T> q) {
+// q inside or on convex polygon h (CCW, from hull())
+// O(log n)
+template <class T>
+bool inConvex(const vector<P<T>>& h, P<T> q) {
   int n = h.size();
   if (n == 1) return q == h[0];
   if (n == 2) return onSeg(q, h[0], h[1]);
-  if (orient(h[0], h[1], q) < 0 || orient(h[0], h[n - 1], q) > 0)
-    return false;
+  if (orient(h[0], h[1], q) < 0 ||
+      orient(h[0], h[n - 1], q) > 0) return false;
   int l = 1, r = n - 1;
   while (r - l > 1) {
     int m = (l + r) / 2;
@@ -117,8 +133,8 @@ template <class T> T diameter2(const vector<P<T>>& h) {
   T best = 0;
   for (int i = 0, j = 1; i < n; i++) {
     int ni = (i + 1) % n;
-    while ((h[ni] - h[i]).cross(h[(j + 1) % n] - h[j]) > 0)
-      j = (j + 1) % n;
+    while ((h[ni] - h[i]).cross(h[(j + 1) % n] - h[j])
+           > 0) j = (j + 1) % n;
     best = max({best, (h[i] - h[j]).norm2(),
                 (h[ni] - h[j]).norm2()});
   }
@@ -133,9 +149,11 @@ ll closestPair2(vector<pt> p) {
     ll d = ceill(sqrtl((ld)best));
     while (j < i && p[i].x - p[j].x >= d)
       s.erase({p[j].y, p[j].x}), j++;
-    for (auto it = s.lower_bound({p[i].y - d, LLONG_MIN});
-         it != s.end() && it->first <= p[i].y + d; ++it) {
-      ll dx = p[i].x - it->second, dy = p[i].y - it->first;
+    auto it = s.lower_bound({p[i].y - d, LLONG_MIN});
+    for (; it != s.end() && it->first <= p[i].y + d;
+         ++it) {
+      ll dx = p[i].x - it->second;
+      ll dy = p[i].y - it->first;
       best = min(best, dx * dx + dy * dy);
     }
     s.insert({p[i].y, p[i].x});
@@ -153,12 +171,17 @@ ptd circumcenter(ptd a, ptd b, ptd c) {
 pair<ptd, ld> mec(vector<ptd> p) {
   shuffle(p.begin(), p.end(), mt19937(1234));
   ptd o = p[0]; ld r = 0;
-  auto out = [&](ptd q) { return (q - o).len() > r + EPS; };
-  for (int i = 1; i < (int)p.size(); i++) if (out(p[i])) {
+  auto out = [&](ptd q) {
+    return (q - o).len() > r + EPS;
+  };
+  for (int i = 1; i < (int)p.size(); i++) {
+    if (!out(p[i])) continue;
     o = p[i]; r = 0;
-    for (int j = 0; j < i; j++) if (out(p[j])) {
+    for (int j = 0; j < i; j++) {
+      if (!out(p[j])) continue;
       o = (p[i] + p[j]) / 2; r = (p[i] - o).len();
-      for (int k = 0; k < j; k++) if (out(p[k])) {
+      for (int k = 0; k < j; k++) {
+        if (!out(p[k])) continue;
         o = circumcenter(p[i], p[j], p[k]);
         r = (p[i] - o).len();
       }
@@ -171,7 +194,8 @@ vector<ptd> circleLine(ptd o, ld r, ptd a, ptd b) {
   ptd f = project(o, a, b);
   ld h2 = r * r - (f - o).norm2();
   if (h2 < -EPS) return {};
-  ptd d = (b - a) / (b - a).len() * sqrtl(max((ld)0, h2));
+  ptd d = (b - a) / (b - a).len();
+  d = d * sqrtl(max((ld)0, h2));
   if (h2 < EPS) return {f};
   return {f - d, f + d};
 }

@@ -1,4 +1,4 @@
-// primes < N. bitset: 1e7 -> ~1.2 MB (int array: 40 MB)
+// primes < N. bitset: 1e7 -> 1.2 MB (int array: 40 MB)
 const int N = 1e7 + 3;
 vector<int> primes;
 bitset<N> notprime;

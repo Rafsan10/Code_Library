@@ -1,12 +1,13 @@
 // Union by size, NO path compression -> find O(log n).
 // rollback(snap) undoes all unites after snapshot().
-// Used in: offline dynamic connectivity (segtree on time),
+// For: offline dynamic connectivity (segtree on time),
 // Mo's + DSU, divide & conquer over queries.
 struct DSURollback {
   vector<int> par, sz;
-  vector<pair<int, int>> ops; // {root kept, root merged}
+  vector<pair<int, int>> ops; // {kept root, merged}
   int comps;
-  DSURollback(int n) : par(n + 1), sz(n + 1, 1), comps(n) {
+  DSURollback(int n)
+      : par(n + 1), sz(n + 1, 1), comps(n) {
     iota(par.begin(), par.end(), 0);
   }
   int find(int u) {

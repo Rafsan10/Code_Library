@@ -1,4 +1,4 @@
-// Factorize n with `primes` (Sieve, up to sqrt(n)). Gives
+// Factorize n with `primes` (Sieve, up to sqrt n):
 // min/max prime, #distinct primes, #primes with power,
 // NOD (number of divisors), SOD (sum of divisors)
 void divisorsInfo(ll n, vector<int>& primes) {
@@ -9,7 +9,9 @@ void divisorsInfo(ll n, vector<int>& primes) {
     if (n % p) continue;
     mnP = min(mnP, p); mxP = max(mxP, p);
     int k = 0; ll s = 1, pw = 1;
-    while (n % p == 0) { n /= p; k++; pw *= p; s += pw; }
+    while (n % p == 0) {
+      n /= p; k++; pw *= p; s += pw;
+    }
     cntP++; totalP += k;
     nod *= (k + 1);
     sod *= s;

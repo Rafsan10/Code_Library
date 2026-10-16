@@ -1,5 +1,6 @@
 // base conversion, 2 <= m <= 36, n >= 0
-const string DIG = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const string DIG =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 string tenToM(ll n, int m) {
   if (n == 0) return "0";
   string res;
