@@ -1,40 +1,19 @@
-int m,n,deg[MM],source,sink,K,val[MM][12];
-struct edge{
-  int v,w;
-}adj[MM][500];
-struct info{
-  int v,w,k;
-  bool operator<(const info &b)const{
-    return w>b.w;
+// d[v] = K smallest walk lengths src -> v (sorted, walks
+// may repeat vertices). Each node popped <= K times.
+// O(K * (V + E) log). adj[u] = {v, w}, w >= 0
+vector<vector<ll>> kShortest(int src, int K,
+    vector<vector<pair<int, ll>>>& adj) {
+  int n = adj.size();
+  vector<vector<ll>> d(n);
+  priority_queue<pair<ll, int>, vector<pair<ll, int>>,
+                 greater<pair<ll, int>>> pq;
+  pq.push({0, src});
+  while (!pq.empty()) {
+    auto [du, u] = pq.top(); pq.pop();
+    if ((int)d[u].size() >= K) continue;
+    d[u].push_back(du);
+    for (auto [v, w] : adj[u])
+      if ((int)d[v].size() < K) pq.push({du + w, v});
   }
-};
-priority_queue<info,vector<info>>Q;
-void kthBestShortestPath(){
-  int i,j;
-  info u,v;
-  for(i=0;i<n;i++)
-    for(j=0;j<K;j++)val[i][j]=inf;
-  u.v=source,u.k=0,u.w=0;
-  Q.push(u);
-  while(!Q.empty()){
-    u=Q.top();
-    Q.pop();
-    for(i=0;i<deg[u.v];i++){
-      v.v=adj[u.v][i].v;
-      int cost=adj[u.v][i].w+u.w;
-      for(v.k=u.k;v.k<K;v.k++){
-        if(cost==inf)break;
-        if(val[v.v][v.k]>cost){
-          swap(cost,val[v.v][v.k]);
-          v.w=val[v.v][v.k];
-          Q.push(v);
-          break;
-        }
-      }
-      for(v.k++;v.k<K;v.k++){
-        if(cost==inf)break;
-        if(val[v.v][v.k]>cost)swap(cost, val[v.v][v.k]);
-      }
-    }
-  }
+  return d;
 }

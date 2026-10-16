@@ -1,3 +1,4 @@
+// g[u] = {v, edge_id}; edge ids 1..n-1
 vector<pair<int, int>> g[N];
 int edge_to_ch[N];
 int par[N], dep[N], sz[N];
@@ -37,8 +38,8 @@ int lca(int a, int b) {
 int n;
 // process node u upto it's ancestor a
 // if excl is true, a won't process
-i64 chain_process(int a, int u, bool excl = false) {
-  i64 ans = 0;
+ll chain_process(int a, int u, bool excl = false) {
+  ll ans = 0;
   for (; head[u] != head[a]; u = par[head[u]]) {
     ans = max(ans, query(1, 1, n, st[head[u]], st[u]));
   }
@@ -47,8 +48,8 @@ i64 chain_process(int a, int u, bool excl = false) {
 }
 // process path from node a to b
 // if excl is true, lca won't process
-i64 path_process(int a, int b, bool excl = false) {
-  i64 ans = 0;
+ll path_process(int a, int b, bool excl = false) {
+  ll ans = 0;
   for (; head[a] != head[b]; b = par[head[b]]) {
     if (dep[head[a]] > dep[head[b]]) swap(a, b);
     ans = max(ans, query(1, 1, n, st[head[b]], st[b]));
@@ -68,35 +69,12 @@ void path_update(int a, int b, int val,
   if (dep[a] > dep[b]) swap(a, b);
   update(1, 1, n, st[a] + excl, st[b], val);
 }
-/*
-   dfs(1);
-   head[1] = 1;
-   dfs_hld(1);
+/* Needs a segtree with query(1,1,n,l,r) (max here) and
+   update(1,1,n,l,r,val). Usage:
+   dfs(1); head[1] = 1; dfs_hld(1);
+   node value: arr[st[u]] = val[u]
+   edge value: store on child, arr[st[edge_to_ch[i]]]
+     = cost[i], then use excl = true (skip lca)
    build(1, 1, n);
+   subtree of u = [st[u], en[u]]
 */
-void solve() {
-  cin >> n;
-  int q;
-  cin >> q;
-  for (int i = 1; i < n; i++) {
-    int u, v, c;
-    cin >> u >> v >> c;
-    g[u].push_back({v, i});
-    g[v].push_back({u, i});
-    edge_cost[i] = c;
-  }
-  dfs(1);
-  head[1] = 1;
-  dfs_hld(1);
-  for (int i = 1; i < n; i++) {
-    int u = edge_to_ch[i];
-    arr[st[u]] = edge_cost[i];
-  }
-  build(1, 1, n);
-  while (q--) {
-    int u, v, val;
-    cin >> u >> v >> val;
-    path_update(u, v, val, true);
-    cout << path_process(u, v, true) << '\n';
-  }
-}

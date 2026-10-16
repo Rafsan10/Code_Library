@@ -1,6 +1,6 @@
-int mod(string& num, int a) {
-  int res = 0;
-  for (int i = 0; i < num.length(); i++)
-    res = (res * 10 + num[i] - '0') % a;
+// (big number given as string) % a
+ll strMod(const string& num, ll a) {
+  ll res = 0;
+  for (char c : num) res = (res * 10 + (c - '0')) % a;
   return res;
 }

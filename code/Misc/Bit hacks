@@ -4,7 +4,7 @@ for (int s=m; ; s=(s-1)&m) {
  ... you can use s ...
  if (s==0)  break;
 }
-# c = x&-x, r = x+c; (((rˆx) >> 2)/c) | r is the
+# c = x&-x, r = x+c; (((r^x) >> 2) / c) | r is the
 next number after x with the same number of bits set.
 # __builtin_popcount(x) //number of ones in binary
   __builtin_popcountll(x) // for long long

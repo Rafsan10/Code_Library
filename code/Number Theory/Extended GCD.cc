@@ -1,10 +1,12 @@
-// return {x,y} such that ax+by=gcd(a,b)
-int exgcd(int a, int b, int &x, int &y) {
+// returns g = gcd(a, b), finds x, y with a*x + b*y = g
+ll exgcd(ll a, ll b, ll &x, ll &y) {
   if (b == 0) {
     x = 1; y = 0;
     return a;
   }
-  int g = exgcd(b, a % b, y, x);
+  ll g = exgcd(b, a % b, y, x);
   y -= a / b * x;
   return g;
-} // bezout's identity: a.x +b.y = gcd(a,b)
+}
+// all solutions: x + k*(b/g), y - k*(a/g)
+// a*x + b*y = c solvable iff c % g == 0 (scale by c/g)

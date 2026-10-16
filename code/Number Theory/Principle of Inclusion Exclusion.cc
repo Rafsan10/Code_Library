@@ -1,19 +1,18 @@
-// count numbers in [1, n] not divisible by any of the
-// integers in the given array a. It is n - (div by one
-// number - div by two numbers + div by three - ...)
-int PIE(int div[], int n, int num) {
-  int sum = 0;
+// count numbers in [1, num] NOT divisible by any of
+// div[0..n-1] = num - (|A| - |A&B| + |A&B&C| - ...)
+ll PIE(vector<ll>& div, ll num) {
+  int n = div.size();
+  ll sum = 0;
   for (int msk = 1; msk < (1 << n); ++msk) {
-    int bit_cnt = 0;
-    int cur_lcm = 1;
-    for (int i = 0; i < n; ++i) {
-      if (msk & (1 << i)) {
-        ++bit_cnt;
-        cur_lcm = LCM(cur_lcm, div[i]);
+    ll lcm = 1;
+    for (int i = 0; i < n && lcm <= num; ++i)
+      if (msk >> i & 1) {
+        ll g = __gcd(lcm, div[i]);
+        if (lcm / g > num / div[i]) lcm = num + 1; // > num
+        else lcm = lcm / g * div[i];
       }
-    }
-    int cur = num / cur_lcm;
-    if (bit_cnt & 1) sum += cur;
+    ll cur = num / lcm;
+    if (__builtin_popcount(msk) & 1) sum += cur;
     else sum -= cur;
   }
   return num - sum;

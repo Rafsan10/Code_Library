@@ -36,9 +36,8 @@ array<vector<int>, 2> get_sa(string& s, int lim=128) {
 auto compare = [&] (int l1, int r1, int l2, int r2) {
   int len1 = r1 - l1 + 1, len2 = r2 - l2 + 1;
   int len = min(len1, len2);
-  int i = pos[l1], j = pos[l2], x;
-  if (l1 != l2) x = st.query(i, j);
-  else x = len;
+  // st = Sparse(sa, lcp) below; get_lcp takes positions
+  int x = (l1 != l2) ? st.get_lcp(l1, l2) : len;
   if (x >= len) {
     if (len1 == len2) return 0;
     if (len1 < len2) return -1;
@@ -55,7 +54,7 @@ auto kth = [&] (ll k) {
     i++;
   }
   k = min(k, 0ll + n - sa[i] - lcp[i]);
-  array<int, 2> ret = {sa[i], k + lcp[i]};
+  array<int, 2> ret = {sa[i], (int)(k + lcp[i])};
   return ret;
 };
 ## Kth Unique Substring (Multiple Queries)
@@ -68,7 +67,7 @@ auto kth = [&] (ll k) {
           - pref.begin();
   i--;
   k -= pref[i];
-  return array<int, 2>{sa[i], k + lcp[i]};
+  return array<int, 2>{sa[i], (int)(k + lcp[i])};
 };
 auto [i, len] = kth(k);
 cout << s.substr(i, len) << "\n";
@@ -113,7 +112,8 @@ for (int len = 1; len <= n / 2; ++len) {
   }
 }
 ## Sparse Table for LCP Array
-struct Sparse {
+struct Sparse { // lcp of suffixes at positions l, r
+  static const int K = 20; // 2^K > n
   int n;
   vector<array<int, K>> st;
   vector<int> pos;
@@ -136,7 +136,7 @@ struct Sparse {
     if (l > r) swap(l, r);
     assert(l < r);
     l++;
-    int k = lg[r - l + 1];
+    int k = __lg(r - l + 1);
     return min(st[l][k], st[r - (1 << k) + 1][k]);
   }
 };

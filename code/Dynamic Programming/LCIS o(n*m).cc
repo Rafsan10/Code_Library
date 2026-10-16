@@ -1,22 +1,15 @@
-int a[100] = {0}, b[100] = {0}, f[100] = {0};
-int n = 0, m = 0;
-int main(void) {
-  cin >> n;
-  for (int i = 1; i <= n; i++) cin >> a[i];
-  cin >> m;
-  for (int i = 1; i <= m; i++) cin >> b[i];
-  for (int i = 1; i <= n; i++) {
-    int k = 0;
-    for (int j = 1; j <= m; j++) {
-      if (a[i] > b[j] && f[j] > k)
-        k = f[j];
-      else if (a[i] == b[j] && k + 1 > f[j])
-        f[j] = k + 1;
+// Longest Common Increasing Subsequence, O(n * m)
+// f[j] = LCIS of a[0..i] and b[0..j] that ends at b[j]
+int LCIS(vector<int>& a, vector<int>& b) {
+  int m = b.size(), ans = 0;
+  vector<int> f(m, 0);
+  for (int x : a) {
+    int best = 0; // best f[j] with b[j] < x so far
+    for (int j = 0; j < m; j++) {
+      if (b[j] < x) best = max(best, f[j]);
+      else if (b[j] == x) f[j] = max(f[j], best + 1);
     }
   }
-  int and = 0;
-  for (int i = 1; i <= m; i++)
-    if (f[i] > ans) ans = f[i];
-  cout << and<< endl;
-  return 0;
+  for (int j = 0; j < m; j++) ans = max(ans, f[j]);
+  return ans;
 }

@@ -1,23 +1,19 @@
-void Dijkstra(int start) {
-  // vector<pair<int, int>> adj[N];
-  priority_queue<pair<int, int>, vector<pair<int, int>>,
-                 greater<pair<int, int>>> pq;
-  pq.push({0, start});
+// adj[u] = {v, w}, w >= 0. Returns dist (INF: unreachable)
+const ll INF = 1e18;
+vector<ll> dijkstra(int src, vector<vector<pair<int, ll>>>& adj) {
+  int n = adj.size();
+  vector<ll> d(n, INF);
+  priority_queue<pair<ll, int>, vector<pair<ll, int>>,
+                 greater<pair<ll, int>>> pq;
+  d[src] = 0; pq.push({0, src});
   while (!pq.empty()) {
-    auto it = pq.top();
-    pq.pop();
-    int wt = it.first;
-    int u = it.second;
-    if (vis[u])
-      continue;
-    vis[u] = 1;
-    for (pair<int, int> i : adj[u]) {
-      int adjWt = i.second;
-      int adjNode = i.first;
-      if (dist[adjNode] > wt + adjWt) {
-        dist[adjNode] = wt + adjWt;
-        pq.push({dist[adjNode], adjNode});
+    auto [du, u] = pq.top(); pq.pop();
+    if (du != d[u]) continue; // stale entry
+    for (auto [v, w] : adj[u])
+      if (du + w < d[v]) {
+        d[v] = du + w;
+        pq.push({d[v], v});
       }
-    }
   }
+  return d;
 }

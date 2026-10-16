@@ -1,40 +1,11 @@
-// sum over subsets
-// fact: need sum of submasks
-void SOS(vector<int>& v) {
-  const int BITS =
-      log2(*max_element(v.begin(), v.end())) + 1;
-  vector<int> freq(1 << BITS, 0);
-  for (int mask : v) freq[mask]++;
-  vector<vector<int>> dp(BITS + 1,
-                         vector<int>(1 << BITS, 0));
-  for (int mask = 0; mask < 1 << BITS; mask++) {
-    dp[0][mask] = freq[mask];
-  }
-  for (int bits = 1; bits <= BITS; bits++) {
-    for (int mask = 0; mask < 1 << BITS; mask++) {
-      if ((mask & (1 << (bits - 1))) == 0) {
-        dp[bits][mask] = dp[bits - 1][mask];
-      } else {
-        int other_mask = mask - (1 << (bits - 1));
-        dp[bits][mask] = dp[bits - 1][mask]
-                       + dp[bits - 1][other_mask];
-      }
-    }
-  }
-  for (int mask : v) cout << dp[BITS][mask] << '\n';
-}
-// O(BITS * 2 ^ BITS)
-// dp[bits][mask]: submasks may differ only in the
-// lowest 'bits' bits. e.g. dp[1][11]: 10, 11 allowed;
-// 01, 00 not (only lowest 1 bit can differ).
-// To traverse all the submasks of a mask:
-// submask = mask
-// do {
-// submask = (submask - 1) & mask
-// } while (submask)
-// O(3 ^ BITS)
+// SOS DP, O(MLOG * 2^MLOG). Set dp[mask] = f(mask), then
+// forward1: dp[mask] = sum of f(sub) over submasks sub
+// backward1: inverse of forward1 (Mobius transform)
+// forward2 / backward2: same for supermasks
+// All submasks of mask, O(3^n) total over all masks:
+// for (int s = mask; s; s = (s - 1) & mask) {...} (+ s=0)
 const int MAXN = 1 << 20, MLOG = 20;
-int dp[MAXN], freq[MAXN];
+ll dp[MAXN];
 // Sum over subsets (SOS Down)
 void forward1() {
   for (int bit = 0; bit < MLOG; bit++)

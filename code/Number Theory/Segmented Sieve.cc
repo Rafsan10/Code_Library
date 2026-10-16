@@ -1,19 +1,14 @@
-void segmentedSieve(int L, int R) {
-  bool isPrime[R - L + 1];
-  for (int i = 0; i <= R - L + 1; i++)
-    isPrime[i] = true;
-  if (L == 1) isPrime[0] = false;
-  for (int i = 0; primes[i] * primes[i] <= R; i++) {
-    int curPrime = primes[i];
-    int base = curPrime * curPrime;
-    if (base < L) {
-      base = ((L + curPrime - 1) / curPrime) * curPrime;
-    }
-    for (int j = base; j <= R; j += curPrime)
-      isPrime[j - L] = false;
+// Primes in [L, R], R up to ~1e12, R - L up to ~1e7
+// `primes` must contain all primes <= sqrt(R) (Sieve)
+vector<ll> segmentedSieve(ll L, ll R, vector<int>& primes) {
+  vector<bool> isPrime(R - L + 1, true);
+  for (ll p : primes) {
+    if (p * p > R) break;
+    ll start = max(p * p, (L + p - 1) / p * p);
+    for (ll j = start; j <= R; j += p) isPrime[j - L] = false;
   }
-  for (int i = 0; i <= R - L; i++) {
-    if (isPrime[i] == true) cout << L + i << '\n';
-  }
-  cout << '\n';
+  vector<ll> res;
+  for (ll i = max(L, 2LL); i <= R; i++)
+    if (isPrime[i - L]) res.push_back(i);
+  return res;
 }

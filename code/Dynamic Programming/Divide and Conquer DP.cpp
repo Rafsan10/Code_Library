@@ -1,26 +1,28 @@
-ll G,L;///total group,cell size
-ll dp[8001][801],cum[8001];
-ll C[8001];///value of each cell
-inline ll cost(ll l,ll r){
-  return(cum[r]-cum[l-1])*(r-l+1);
+// Split C[1..L] into G non-empty groups, minimize sum cost
+// dp[g][i] = min_{j<=i} dp[g-1][j-1] + cost(j, i)
+// Valid when opt(g, i) <= opt(g, i+1). O(G * L log L)
+const ll INF = 1e18;
+int G, L;
+vector<ll> pre;           // pre[i] = C[1] + ... + C[i]
+vector<vector<ll>> dp;    // dp[G + 1][L + 1]
+ll cost(int l, int r) { // EDIT: cost of group [l, r]
+  return (pre[r] - pre[l - 1]) * (r - l + 1);
 }
-void fn(ll g,ll st,ll ed,ll r1,ll r2){
-  if(st>ed)return;
-  ll mid=(st+ed)/2,pos=-1;
-  dp[mid][g]=inf;
-  for(int i=r1;i<=r2;i++){
-    ll tcost=cost(i,mid)+dp[i-1][g-1];
-    if(tcost<dp[mid][g]){
-        dp[mid][g]=tcost,pos=i;
-    }
+void calc(int g, int st, int ed, int optl, int optr) {
+  if (st > ed) return;
+  int mid = (st + ed) / 2, pos = optl;
+  dp[g][mid] = INF;
+  for (int i = optl; i <= min(mid, optr); i++) {
+    if (dp[g - 1][i - 1] >= INF) continue;
+    ll c = dp[g - 1][i - 1] + cost(i, mid);
+    if (c < dp[g][mid]) dp[g][mid] = c, pos = i;
   }
-  fn(g,st,mid-1,r1,pos);
-  fn(g,mid+1,ed,pos,r2);
+  calc(g, st, mid - 1, optl, pos);
+  calc(g, mid + 1, ed, pos, optr);
 }
-int main(){
-  for(int i=1;i<=L;i++)
-    cum[i]=cum[i-1]+C[i];
-  for(int i=1;i<=L;i++)
-    dp[i][1]=cost(1,i);
-  for(int i=2;i<=G;i++)fn(i,1,L,1,L);
+ll solve() {
+  dp.assign(G + 1, vector<ll>(L + 1, INF));
+  dp[0][0] = 0;
+  for (int g = 1; g <= G; g++) calc(g, 1, L, 1, L);
+  return dp[G][L];
 }

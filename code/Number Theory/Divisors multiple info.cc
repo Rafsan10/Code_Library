@@ -1,36 +1,24 @@
-constexpr int N = 1000005;
-void Divisors(int n) {
-  int sum = 1, total = 1;
-  int mnP = INT_MAX, mxP = INT_MIN;
+// Factorize n with `primes` (Sieve, up to sqrt(n)). Gives
+// min/max prime, #distinct primes, #primes with power,
+// NOD (number of divisors), SOD (sum of divisors)
+void divisorsInfo(ll n, vector<int>& primes) {
+  ll nod = 1, sod = 1, mnP = LLONG_MAX, mxP = 0;
   int cntP = 0, totalP = 0;
-  for (int i = 0; i < N && Prime[i] * Prime[i] <= n;
-       i++) {
-    if (n % Prime[i] == 0) {
-      mnP = min(mnP, Prime[i]);
-      mxP = max(mnP, Prime[i]);
-      int k = 0;
-      cntP++;
-      while (n % Prime[i] == 0) {
-        k++;
-        n /= Prime[i];
-      }
-      sum *= (k + 1);  // NOD
-      totalP += k;
-      int s = 0, p = 1;
-      while (k-- >= 0) {
-        s += p;
-        p *= Prime[i];
-      };
-      total *= s;  // SOD
-    }
+  for (ll p : primes) {
+    if (p * p > n) break;
+    if (n % p) continue;
+    mnP = min(mnP, p); mxP = max(mxP, p);
+    int k = 0; ll s = 1, pw = 1;
+    while (n % p == 0) { n /= p; k++; pw *= p; s += pw; }
+    cntP++; totalP += k;
+    nod *= (k + 1);
+    sod *= s;
   }
-  if (n > 1) {
+  if (n > 1) { // remaining prime factor
     cntP++, totalP++;
-    sum *= 2;
-    total *= (1 + n);
-    mnP = min(mnP, n);
-    mxP = max(mnP, n);
+    nod *= 2; sod *= (1 + n);
+    mnP = min(mnP, n); mxP = max(mxP, n);
   }
   cout << mnP << " " << mxP << " " << cntP << " "
-       << totalP << " " << sum << " " << total << "\n";
+       << totalP << " " << nod << " " << sod << "\n";
 }

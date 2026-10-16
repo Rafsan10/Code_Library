@@ -1,9 +1,11 @@
-int power(long long n, long long k, int mod = 1e9+7) {
-  int ans = 1 % mod; n %= mod; if (n < 0) n += mod;
-  while (k) {
-    if (k & 1) ans = (long long) ans * n % mod;
-    n = (long long) n * n % mod;
-    k >>= 1;
+// b^e % mod. mod is REQUIRED (no default -> no wrong-mod WA)
+// __int128 makes it safe for mod up to ~1e18
+ll power(ll b, ll e, ll mod) {
+  ll r = 1 % mod; b %= mod; if (b < 0) b += mod;
+  while (e > 0) {
+    if (e & 1) r = (__int128)r * b % mod;
+    b = (__int128)b * b % mod;
+    e >>= 1;
   }
-  return ans;
+  return r;
 }

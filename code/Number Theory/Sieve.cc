@@ -1,15 +1,12 @@
+// primes < N. bitset: 1e7 -> ~1.2 MB (int array: 40 MB)
 const int N = 1e7 + 3;
 vector<int> primes;
-int notprime[N];
+bitset<N> notprime;
 void sieve() {
-  primes.push_back(2);
-  for (int i = 4; i < N; i += 2)
-    notprime[i] = true;
-  for (ll i = 3; i < N; i += 2) {
-    if (!notprime[i]) {
-      primes.push_back(i);
-      for (ll j = 1LL * i * i; j < N; j += 2 * i)
-        notprime[j] = true;
-    }
+  notprime[0] = notprime[1] = 1;
+  for (ll i = 2; i < N; i++) {
+    if (notprime[i]) continue;
+    primes.push_back(i);
+    for (ll j = i * i; j < N; j += i) notprime[j] = 1;
   }
 }

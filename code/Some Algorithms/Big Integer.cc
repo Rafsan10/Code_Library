@@ -1,3 +1,4 @@
+// Non-negative big integers as decimal strings
 struct BigInteger {
   string str;
   // Constructor to initialize
@@ -16,10 +17,9 @@ struct BigInteger {
     string res(n + 1, '0');
     int carry = 0;
     for (int i = n - 1; i >= 0; i--) {
-            int digit=(a[i -'0')+(c[i]-'0')
-    +carry;
-            carry = digit / 10;
-            res[i + 1] = digit % 10 + '0';
+      int digit = (a[i] - '0') + (c[i] - '0') + carry;
+      carry = digit / 10;
+      res[i + 1] = digit % 10 + '0';
     }
     if (carry == 1) {
       res[0] = '1';
@@ -27,8 +27,7 @@ struct BigInteger {
     } else
       return BigInteger(res.substr(1));
   }
-  // Overload - operator to subtract
-  // first check which number is greater, then subtract
+  // returns |a - b|
   BigInteger operator-(const BigInteger& b) {
     string a = str;
     string c = b.str;
@@ -68,10 +67,10 @@ struct BigInteger {
     for (int i = alen - 1; i >= 0; i--) {
       int carry = 0;
       for (int j = clen - 1; j >= 0; j--) {
-                int digit = (a[i] - '0') * 
-     (c[j-'0')+(res[i+j+1]-'0')+carry;
-                carry = digit / 10;
-                res[i + j + 1] = digit % 10 + '0';
+        int digit = (a[i] - '0') * (c[j] - '0')
+                    + (res[i + j + 1] - '0') + carry;
+        carry = digit / 10;
+        res[i + j + 1] = digit % 10 + '0';
       }
       res[i] += carry;
     }
@@ -79,6 +78,16 @@ struct BigInteger {
     while (i < n && res[i] == '0') i++;
     if (i == n) return BigInteger("0");
     return BigInteger(res.substr(i));
+  }
+  // divide by small d > 0, r = remainder
+  BigInteger divSmall(ll d, ll& r) const {
+    string q; r = 0;
+    for (char ch : str) {
+      r = r * 10 + (ch - '0');
+      q += char('0' + r / d); r %= d;
+    }
+    size_t k = q.find_first_not_of('0');
+    return BigInteger(k == string::npos ? "0" : q.substr(k));
   }
   // Overload << operator to output
   // BigInteger object

@@ -1,4 +1,5 @@
-const int N = 1e5 + 5, LG = 17;
+// 1-indexed, root's parent = 0. dfs(root, 0) first
+const int N = 2e5 + 5, LG = 20; // 2^LG > N
 vector<int> g[N];
 int depth[N], parent[N][LG];
 void dfs(int u, int p) {
@@ -32,7 +33,7 @@ int lca(int u, int v) {
 int dist(int u, int v) {
   return depth[u] + depth[v] - 2 * depth[lca(u, v)];
 }
-int kthParent(int u, int k) {
+int kthParent(int u, int k) { // 0 if k > depth
   for (int i = 0; i < LG; i++) {
     if (k >> i & 1) {
       u = parent[u][i];
